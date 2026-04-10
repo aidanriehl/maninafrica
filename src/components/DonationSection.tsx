@@ -16,7 +16,7 @@ const DonationSection = () => {
         {/* Community stats with 3D effect */}
         <div className="flex gap-4 mb-8">
           {[
-            { value: donors.toLocaleString(), label: "Donors" },
+            { value: donors.toLocaleString(), label: "Total Donors" },
             { value: `$${totalDonated.toLocaleString()}`, label: "Recurring Donations" },
           ].map((stat, i) => (
             <div key={i} className="flex-1">
