@@ -7,8 +7,8 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
       <div className="container flex items-center justify-between py-4">
-        <h1 className="text-xl font-serif font-black tracking-tight">
-          GIVING<span className="text-primary">)</span>CIRCLES
+        <h1 className="text-xl font-serif font-black tracking-tight text-foreground">
+          GIVING<span className="text-primary font-black">)</span>CIRCLES
         </h1>
         <div className="hidden sm:flex items-center gap-3">
           <a href="#contact" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
