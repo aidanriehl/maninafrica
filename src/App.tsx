@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import ScrollToTop from "./components/ScrollToTop";
 import Index from "./pages/Index.tsx";
 import Campaigns from "./pages/Campaigns.tsx";
 import AdminLogin from "./pages/AdminLogin.tsx";
@@ -17,6 +18,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/campaigns" element={<Campaigns />} />
