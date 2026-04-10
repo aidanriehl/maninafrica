@@ -10,6 +10,7 @@ interface Campaign {
   title: string;
   thumbnail_url: string;
   video_url: string | null;
+  description?: string | null;
 }
 
 interface Spotlight {
@@ -19,29 +20,49 @@ interface Spotlight {
   description: string | null;
 }
 
-const fallbackVideos = [
+const fallbackVideos: Campaign[] = [
   { id: "1", title: "Feeding 100 Families", thumbnail_url: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=300&h=500&fit=crop", video_url: "#" },
   { id: "2", title: "Clean Water for a Village", thumbnail_url: "https://images.unsplash.com/photo-1594708767771-a7502209ff51?w=300&h=500&fit=crop", video_url: "#" },
   { id: "3", title: "School Supplies Drive", thumbnail_url: "https://images.unsplash.com/photo-1497375638960-ca368c7231e4?w=300&h=500&fit=crop", video_url: "#" },
-  { id: "4", title: "Rent Paid for Single Mom", thumbnail_url: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=300&h=500&fit=crop", video_url: "#" },
-  { id: "5", title: "Winter Clothes Giveaway", thumbnail_url: "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=300&h=500&fit=crop", video_url: "#" },
-  { id: "6", title: "Medical Bills Covered", thumbnail_url: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=300&h=500&fit=crop", video_url: "#" },
 ];
 
 const CampaignCard = ({ campaign }: { campaign: Campaign }) => (
-  <a href={campaign.video_url || "#"} className="group" target="_blank" rel="noopener noreferrer">
-    <div className="relative rounded-xl overflow-hidden aspect-[9/16] shadow-md group-hover:shadow-lg transition-shadow">
-      <img src={campaign.thumbnail_url} alt={campaign.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
-      <div className="absolute inset-0 bg-foreground/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-        <div className="w-12 h-12 bg-background/80 rounded-full flex items-center justify-center">
-          <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-foreground ml-0.5"><path d="M8 5v14l11-7z" /></svg>
-        </div>
-      </div>
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-foreground/70 to-transparent p-3">
-        <p className="text-primary-foreground text-xs font-bold leading-tight">{campaign.title}</p>
-      </div>
+  <div className="bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden">
+    {/* Video/thumbnail area */}
+    <div className="aspect-[9/12] bg-black relative">
+      {campaign.video_url && campaign.video_url !== "#" ? (
+        <video
+          src={campaign.video_url}
+          className="w-full h-full object-cover"
+          controls
+          playsInline
+          poster={campaign.thumbnail_url}
+        />
+      ) : (
+        <img
+          src={campaign.thumbnail_url}
+          alt={campaign.title}
+          className="w-full h-full object-cover"
+        />
+      )}
     </div>
-  </a>
+
+    {/* Content area */}
+    <div className="p-4">
+      <h3 className="font-serif text-lg font-bold mb-2">{campaign.title}</h3>
+      {campaign.description && (
+        <span className="inline-block px-3 py-1 bg-[#d3ffd9] border border-foreground rounded-full text-xs mb-3">
+          {campaign.description}
+        </span>
+      )}
+      <a
+        href="#donate"
+        className="block w-full mt-3 py-2.5 bg-[#efc738] text-foreground rounded-xl font-bold text-center text-sm hover:bg-[#ddb52e] transition-colors border-2 border-foreground"
+      >
+        DONATE
+      </a>
+    </div>
+  </div>
 );
 
 const Campaigns = () => {
@@ -88,10 +109,16 @@ const Campaigns = () => {
                 <div className="p-4">
                   <h3 className="font-serif text-lg font-bold mb-2">{currentCampaign.title}</h3>
                   {currentCampaign.description && (
-                    <span className="inline-block px-3 py-1 bg-[#d3ffd9] border border-foreground rounded-full text-xs">
+                    <span className="inline-block px-3 py-1 bg-[#d3ffd9] border border-foreground rounded-full text-xs mb-3">
                       {currentCampaign.description}
                     </span>
                   )}
+                  <a
+                    href="#donate"
+                    className="block w-full mt-3 py-2.5 bg-[#efc738] text-foreground rounded-xl font-bold text-center text-sm hover:bg-[#ddb52e] transition-colors border-2 border-foreground"
+                  >
+                    DONATE
+                  </a>
                 </div>
               </div>
             </section>
@@ -100,7 +127,7 @@ const Campaigns = () => {
           {/* All Campaigns Section */}
           <section>
             <h2 className="font-serif text-2xl md:text-3xl font-bold mb-6">All Campaigns</h2>
-            <div className="grid grid-cols-3 gap-3 sm:gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {campaigns.map((campaign) => (
                 <CampaignCard key={campaign.id} campaign={campaign} />
               ))}
