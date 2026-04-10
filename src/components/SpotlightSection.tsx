@@ -46,53 +46,59 @@ const SpotlightSection = () => {
 
   return (
     <section className="py-6 md:py-8">
-      <div className="container max-w-4xl">
-        {/* Outer tan container */}
-        <div className="bg-[#E8DED1] rounded-3xl p-4 md:p-6 border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))]">
-          {/* Title box */}
-          <div className="bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] p-5 mb-4 md:mb-6 text-center">
-            <h2 className="font-serif text-xl md:text-2xl font-bold mb-1">
-              Campaign In The Spotlight 👇
-            </h2>
-            <p className="text-muted-foreground text-sm">
-              all current donations are going towards supporting this individual/issue
-            </p>
-          </div>
+      <div className="container max-w-md">
+        {/* Title box */}
+        <div className="bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] p-5 mb-6 text-center">
+          <h2 className="font-serif text-xl md:text-2xl font-bold mb-1">
+            Campaign In The Spotlight 👇
+          </h2>
+          <p className="text-muted-foreground text-sm">
+            all current donations are going towards supporting this individual/issue
+          </p>
+        </div>
 
-          {/* Video and description side by side */}
-          <div className="grid grid-cols-2 gap-3 md:gap-6">
-            {/* Video - no container on mobile */}
-            {embedUrl && (
-              <div className="rounded-2xl md:bg-white md:border-2 md:border-foreground md:shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden">
-                <div className="aspect-[9/16] max-h-[520px]">
-                  <iframe
-                    src={embedUrl}
-                    className="w-full h-full rounded-2xl md:rounded-none"
-                    allowFullScreen
-                    allow="autoplay; encrypted-media"
-                    title={spotlight.title}
-                  />
+        {/* Spotlight card - image 10 style */}
+        <div className="bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden">
+          {/* Video area - takes up ~70% */}
+          {embedUrl && (
+            <div className="relative aspect-[9/14] overflow-hidden">
+              <iframe
+                src={embedUrl}
+                className="absolute inset-0 w-[150%] h-[150%] -top-[15%] -left-[25%] scale-110"
+                allowFullScreen
+                allow="autoplay; encrypted-media"
+                title={spotlight.title}
+                style={{ border: 'none' }}
+              />
+              {/* Gradient overlay at bottom for text readability */}
+              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent" />
+              {/* Play button overlay */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg">
+                  <div className="w-0 h-0 border-t-8 border-b-8 border-l-12 border-transparent border-l-primary ml-1" />
                 </div>
               </div>
-            )}
-
-            {/* Description box - no title on mobile */}
-            <div className="bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] p-4 md:p-6 flex flex-col">
-              <h3 className="hidden md:block font-serif text-xl md:text-2xl font-bold mb-3">{spotlight.title}</h3>
-              {spotlight.description && (
-                <p className="text-muted-foreground text-sm md:text-base leading-relaxed flex-1">{spotlight.description}</p>
-              )}
-              {spotlight.more_link && (
-                <a
-                  href={spotlight.more_link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block mt-4 px-4 md:px-6 py-2 md:py-2.5 bg-primary text-primary-foreground rounded-full font-bold text-xs md:text-sm hover:opacity-90 transition-opacity w-fit"
-                >
-                  Learn More →
-                </a>
-              )}
             </div>
+          )}
+
+          {/* Content area */}
+          <div className="p-5">
+            <h3 className="font-serif text-xl font-bold mb-2">{spotlight.title}</h3>
+            {spotlight.description && (
+              <span className="inline-block px-3 py-1 border border-foreground rounded-full text-sm mb-3">
+                {spotlight.description}
+              </span>
+            )}
+            {spotlight.more_link && (
+              <a
+                href={spotlight.more_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full mt-4 py-3 bg-green-100 text-foreground rounded-xl font-bold text-center text-lg hover:bg-green-200 transition-colors border-2 border-foreground"
+              >
+                WATCH
+              </a>
+            )}
           </div>
         </div>
       </div>
