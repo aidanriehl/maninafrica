@@ -15,7 +15,7 @@ const HeroSection = () => {
               height={800}
             />
           </div>
-          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap">
+          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-[#efc738] text-foreground px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap">
             100% Goes to Giving
           </div>
         </div>

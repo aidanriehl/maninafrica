@@ -65,7 +65,7 @@ const SpotlightSection = () => {
               )}
               <a
                 href="#donate"
-                className="block w-full mt-3 py-2.5 bg-[#C9B97B] text-foreground rounded-xl font-bold text-center text-sm hover:bg-[#B8A86A] transition-colors border-2 border-foreground"
+                className="block w-full mt-3 py-2.5 bg-[#efc738] text-foreground rounded-xl font-bold text-center text-sm hover:bg-[#ddb52e] transition-colors border-2 border-foreground"
               >
                 DONATE
               </a>
