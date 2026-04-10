@@ -72,7 +72,10 @@ const FAQSection = () => {
               className="bg-secondary/40 border border-border rounded-xl px-5 overflow-hidden"
             >
               <AccordionTrigger className="text-left font-bold text-base hover:no-underline py-5">
-                {faq.question}
+                <span className="flex items-start gap-3">
+                  <span className="text-primary font-bold">{i + 1}.</span>
+                  <span>{faq.question}</span>
+                </span>
               </AccordionTrigger>
               <AccordionContent className="text-muted-foreground leading-relaxed pb-5">
                 {faq.answer}
