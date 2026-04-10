@@ -21,7 +21,7 @@ const HeroSection = () => {
         </div>
 
         {/* Title */}
-        <h1 className="font-serif font-black text-3xl md:text-5xl leading-tight max-w-lg mb-4">
+        <h1 className="font-serif font-black text-3xl md:text-5xl leading-tight max-w-lg mb-4 text-foreground drop-shadow-sm">
           Together For Transformation
         </h1>
 
