@@ -12,15 +12,21 @@ const DonationSection = () => {
           100% goes directly to people in need
         </p>
 
-        {/* Community stats */}
+        {/* Community stats with 3D effect */}
         <div className="flex gap-4 mb-8">
-          <div className="flex-1 bg-primary/10 rounded-xl p-5 text-center">
-            <p className="text-3xl md:text-4xl font-bold text-primary">{members.toLocaleString()}</p>
-            <p className="text-sm text-muted-foreground mt-1">Community Members</p>
+          <div className="flex-1 relative">
+            <div className="absolute inset-0 bg-foreground rounded-2xl translate-y-2" />
+            <div className="relative bg-secondary rounded-2xl p-5 text-center border-2 border-foreground">
+              <p className="text-3xl md:text-4xl font-bold text-primary">{members.toLocaleString()}</p>
+              <p className="text-sm text-muted-foreground mt-1">Community Members</p>
+            </div>
           </div>
-          <div className="flex-1 bg-primary/10 rounded-xl p-5 text-center">
-            <p className="text-3xl md:text-4xl font-bold text-primary">${totalDonated.toLocaleString()}</p>
-            <p className="text-sm text-muted-foreground mt-1">Donated So Far</p>
+          <div className="flex-1 relative">
+            <div className="absolute inset-0 bg-foreground rounded-2xl translate-y-2" />
+            <div className="relative bg-secondary rounded-2xl p-5 text-center border-2 border-foreground">
+              <p className="text-3xl md:text-4xl font-bold text-primary">${totalDonated.toLocaleString()}</p>
+              <p className="text-sm text-muted-foreground mt-1">Donated So Far</p>
+            </div>
           </div>
         </div>
 

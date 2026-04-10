@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import { useRef } from "react";
 
 const videos = [
@@ -23,8 +23,8 @@ const VideoRow = () => {
   return (
     <section className="py-12 md:py-16 overflow-hidden">
       <div className="container mb-6">
-        <h2 className="font-serif text-2xl md:text-3xl font-bold text-center">
-          Past Campaigns
+        <h2 className="font-serif text-2xl md:text-3xl font-bold text-center flex items-center justify-center gap-2">
+          Past Campaigns <ChevronDown size={24} className="text-muted-foreground" />
         </h2>
         <p className="text-center text-muted-foreground mt-2">
           Every video is tied to a campaign.
@@ -33,8 +33,8 @@ const VideoRow = () => {
         </p>
       </div>
 
-      {/* Scroll controls */}
-      <div className="container relative">
+      {/* Auto-scrolling row with manual controls */}
+      <div className="relative">
         <button
           onClick={() => scroll("left")}
           className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-9 h-9 bg-background/80 backdrop-blur rounded-full flex items-center justify-center shadow-md border border-border hover:bg-background transition-colors"
@@ -50,12 +50,16 @@ const VideoRow = () => {
           <ChevronRight size={18} />
         </button>
 
-        <div ref={scrollRef} className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-2" style={{ scrollbarWidth: "none" }}>
-          {videos.map((video) => (
+        <div
+          ref={scrollRef}
+          className="flex gap-4 animate-scroll-left hover:[animation-play-state:paused]"
+          style={{ width: "max-content" }}
+        >
+          {[...videos, ...videos].map((video, i) => (
             <a
-              key={video.id}
+              key={i}
               href="#"
-              className="flex-shrink-0 w-40 md:w-48 group snap-start"
+              className="flex-shrink-0 w-40 md:w-48 group"
               target="_blank"
               rel="noopener noreferrer"
             >
