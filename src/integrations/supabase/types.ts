@@ -71,6 +71,7 @@ export type Database = {
           description: string | null
           id: string
           more_link: string | null
+          thumbnail_url: string | null
           title: string
           updated_at: string
           video_url: string | null
@@ -80,6 +81,7 @@ export type Database = {
           description?: string | null
           id?: string
           more_link?: string | null
+          thumbnail_url?: string | null
           title: string
           updated_at?: string
           video_url?: string | null
@@ -89,6 +91,7 @@ export type Database = {
           description?: string | null
           id?: string
           more_link?: string | null
+          thumbnail_url?: string | null
           title?: string
           updated_at?: string
           video_url?: string | null

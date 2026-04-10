@@ -16,6 +16,7 @@ interface Spotlight {
   video_url: string | null;
   more_link: string | null;
   description: string | null;
+  thumbnail_url: string | null;
 }
 
 interface SiteStats {
@@ -35,6 +36,7 @@ const Admin = () => {
   // Spotlight state
   const [spotlight, setSpotlight] = useState<Spotlight | null>(null);
   const [spotTitle, setSpotTitle] = useState("");
+  const [spotThumbnailUrl, setSpotThumbnailUrl] = useState("");
   const [spotVideoUrl, setSpotVideoUrl] = useState("");
   const [spotMoreLink, setSpotMoreLink] = useState("");
   const [spotDescription, setSpotDescription] = useState("");
@@ -80,6 +82,7 @@ const Admin = () => {
       const s = data[0];
       setSpotlight(s);
       setSpotTitle(s.title);
+      setSpotThumbnailUrl(s.thumbnail_url || "");
       setSpotVideoUrl(s.video_url || "");
       setSpotMoreLink(s.more_link || "");
       setSpotDescription(s.description || "");
@@ -114,6 +117,7 @@ const Admin = () => {
 
     const payload = {
       title: spotTitle,
+      thumbnail_url: spotThumbnailUrl || null,
       video_url: spotVideoUrl || null,
       more_link: spotMoreLink || null,
       description: spotDescription || null,
@@ -203,14 +207,21 @@ const Admin = () => {
           />
           <input
             type="text"
-            placeholder="Description (optional)"
+            placeholder="Description/tag (optional)"
             value={spotDescription}
             onChange={(e) => setSpotDescription(e.target.value)}
             className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
           />
           <input
             type="url"
-            placeholder="Video embed URL (e.g. Instagram embed)"
+            placeholder="Thumbnail image URL"
+            value={spotThumbnailUrl}
+            onChange={(e) => setSpotThumbnailUrl(e.target.value)}
+            className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
+          />
+          <input
+            type="url"
+            placeholder="Video URL (Instagram link - opens when clicked)"
             value={spotVideoUrl}
             onChange={(e) => setSpotVideoUrl(e.target.value)}
             className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { Play } from "lucide-react";
 
 interface Spotlight {
   id: string;
@@ -7,23 +8,8 @@ interface Spotlight {
   video_url: string | null;
   more_link: string | null;
   description: string | null;
+  thumbnail_url: string | null;
 }
-
-// Convert Instagram URL to embed URL
-const getInstagramEmbedUrl = (url: string): string => {
-  // Already an embed URL
-  if (url.includes("/embed")) return url;
-
-  // Match Instagram post/reel URLs
-  const match = url.match(/instagram\.com\/(p|reel|reels)\/([A-Za-z0-9_-]+)/);
-  if (match) {
-    const [, type, id] = match;
-    const embedType = type === "reels" ? "reel" : type;
-    return `https://www.instagram.com/${embedType}/${id}/embed/`;
-  }
-
-  return url;
-};
 
 const SpotlightSection = () => {
   const [spotlight, setSpotlight] = useState<Spotlight | null>(null);
@@ -42,7 +28,7 @@ const SpotlightSection = () => {
 
   if (!spotlight) return null;
 
-  const embedUrl = spotlight.video_url ? getInstagramEmbedUrl(spotlight.video_url) : null;
+  const videoLink = spotlight.video_url || spotlight.more_link;
 
   return (
     <section className="py-6 md:py-8">
@@ -59,26 +45,26 @@ const SpotlightSection = () => {
 
         {/* Spotlight card - image 10 style */}
         <div className="bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden">
-          {/* Video area - takes up ~70% */}
-          {embedUrl && (
-            <div className="relative aspect-[9/14] overflow-hidden">
-              <iframe
-                src={embedUrl}
-                className="absolute inset-0 w-[150%] h-[150%] -top-[15%] -left-[25%] scale-110"
-                allowFullScreen
-                allow="autoplay; encrypted-media"
-                title={spotlight.title}
-                style={{ border: 'none' }}
+          {/* Thumbnail area - takes up ~70% */}
+          {spotlight.thumbnail_url && videoLink && (
+            <a
+              href={videoLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative block aspect-[9/14] overflow-hidden group cursor-pointer"
+            >
+              <img
+                src={spotlight.thumbnail_url}
+                alt={spotlight.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
-              {/* Gradient overlay at bottom for text readability */}
-              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent" />
               {/* Play button overlay */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg">
-                  <div className="w-0 h-0 border-t-8 border-b-8 border-l-12 border-transparent border-l-primary ml-1" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <Play className="w-7 h-7 text-primary ml-1" fill="currentColor" />
                 </div>
               </div>
-            </div>
+            </a>
           )}
 
           {/* Content area */}
@@ -89,9 +75,9 @@ const SpotlightSection = () => {
                 {spotlight.description}
               </span>
             )}
-            {spotlight.more_link && (
+            {videoLink && (
               <a
-                href={spotlight.more_link}
+                href={videoLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block w-full mt-4 py-3 bg-green-100 text-foreground rounded-xl font-bold text-center text-lg hover:bg-green-200 transition-colors border-2 border-foreground"
