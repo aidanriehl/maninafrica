@@ -15,19 +15,21 @@ const fallbackVideos = [
 const VideoRow = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [campaigns, setCampaigns] = useState(fallbackVideos);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchCampaigns = async () => {
       const { data } = await supabase.from("campaigns").select("*").order("created_at", { ascending: false });
       if (data && data.length > 0) {
         setCampaigns(data);
       }
     };
-    fetch();
+    fetchCampaigns();
   }, []);
 
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
+    setIsPaused(true);
     scrollRef.current.scrollBy({ left: direction === "left" ? -200 : 200, behavior: "smooth" });
   };
 
@@ -54,7 +56,14 @@ const VideoRow = () => {
           <ChevronRight size={18} />
         </button>
 
-        <div ref={scrollRef} className="flex gap-4 animate-scroll-left hover:[animation-play-state:paused]" style={{ width: "max-content" }}>
+        <div
+          ref={scrollRef}
+          className={`flex gap-4 ${isPaused ? 'overflow-x-auto' : 'animate-scroll-left'} hover:[animation-play-state:paused]`}
+          style={{ width: isPaused ? undefined : "max-content" }}
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={() => setIsPaused(true)}
+        >
           {doubled.map((video, i) => (
             <a key={i} href={video.video_url || "#"} className="flex-shrink-0 w-40 md:w-48 group" target="_blank" rel="noopener noreferrer">
               <div className="relative rounded-xl overflow-hidden aspect-[9/16] shadow-md group-hover:shadow-lg transition-shadow">

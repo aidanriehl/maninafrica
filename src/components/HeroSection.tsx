@@ -26,9 +26,17 @@ const HeroSection = () => {
         </h1>
 
         {/* Subtitle */}
-        <p className="text-muted-foreground text-base md:text-lg max-w-sm leading-relaxed">
-          For less than your Netflix subscription you can support our work
+        <p className="text-muted-foreground text-base md:text-lg max-w-sm leading-relaxed mb-6">
+          Most people never donate, but for less than your Netflix subscription you can support our work
         </p>
+
+        {/* Donate button */}
+        <a
+          href="#donate"
+          className="px-8 py-3 bg-primary text-primary-foreground rounded-full font-bold text-base hover:opacity-90 transition-opacity"
+        >
+          Donate — Join for $10/mo
+        </a>
       </div>
     </section>
   );
