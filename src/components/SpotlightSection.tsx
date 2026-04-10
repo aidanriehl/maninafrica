@@ -46,25 +46,23 @@ const SpotlightSection = () => {
 
   return (
     <section className="py-6 md:py-8">
-      <div className="container max-w-lg">
-        <h2 className="font-serif text-xl md:text-2xl font-bold text-center mb-1">
-          Campaign In The Spotlight 👇
-        </h2>
-        <p className="text-center text-muted-foreground text-sm mb-6">
-          all current donations are going towards supporting this individual/issue
-        </p>
+      <div className="container max-w-4xl">
+        {/* Title box */}
+        <div className="bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] p-5 mb-6 text-center">
+          <h2 className="font-serif text-xl md:text-2xl font-bold mb-1">
+            Campaign In The Spotlight 👇
+          </h2>
+          <p className="text-muted-foreground text-sm">
+            all current donations are going towards supporting this individual/issue
+          </p>
+        </div>
 
-        <div className="relative">
-          <div className="bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden">
-            <div className="p-4 pb-3">
-              <h3 className="font-serif text-lg font-bold">{spotlight.title}</h3>
-              {spotlight.description && (
-                <p className="text-muted-foreground text-sm mt-1">{spotlight.description}</p>
-              )}
-            </div>
-
-            {embedUrl && (
-              <div className="aspect-[9/16] max-h-[480px] bg-foreground/5">
+        {/* Video and description side by side */}
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Video */}
+          {embedUrl && (
+            <div className="bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden">
+              <div className="aspect-[9/16] max-h-[520px]">
                 <iframe
                   src={embedUrl}
                   className="w-full h-full"
@@ -73,19 +71,24 @@ const SpotlightSection = () => {
                   title={spotlight.title}
                 />
               </div>
-            )}
+            </div>
+          )}
 
+          {/* Description box */}
+          <div className="bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] p-6 flex flex-col">
+            <h3 className="font-serif text-xl md:text-2xl font-bold mb-3">{spotlight.title}</h3>
+            {spotlight.description && (
+              <p className="text-muted-foreground leading-relaxed flex-1">{spotlight.description}</p>
+            )}
             {spotlight.more_link && (
-              <div className="p-4 pt-3">
-                <a
-                  href={spotlight.more_link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm font-bold text-primary hover:underline"
-                >
-                  More →
-                </a>
-              </div>
+              <a
+                href={spotlight.more_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block mt-4 px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-bold text-sm hover:opacity-90 transition-opacity w-fit"
+              >
+                Learn More →
+              </a>
             )}
           </div>
         </div>
