@@ -14,7 +14,7 @@ const Header = () => {
           Join — $10/mo
         </a>
         <h1 className="text-xl font-serif font-bold tracking-tight text-foreground">
-          1Man<span className="text-primary font-bold">)</span>WithCam
+          1ManWithCam
         </h1>
         <button
           className="sm:hidden p-2"
