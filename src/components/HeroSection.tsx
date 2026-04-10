@@ -27,7 +27,7 @@ const HeroSection = () => {
 
         {/* Subtitle */}
         <p className="text-muted-foreground text-base md:text-lg max-w-sm leading-relaxed mb-6">
-          Most people never donate, but for less than your Netflix subscription you can support our work
+          Most people never donate, but for less than your Netflix sub you can support our work
         </p>
 
         {/* Donate button */}
