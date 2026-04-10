@@ -21,14 +21,13 @@ const HeroSection = () => {
         </div>
 
         {/* Title */}
-        <h1 className="font-serif font-black text-3xl md:text-5xl leading-tight max-w-lg mb-4 text-foreground drop-shadow-sm">
-          Together For Transformation
+        <h1 className="font-serif font-bold text-2xl md:text-4xl leading-tight max-w-md mb-4 text-foreground">
+          Join Our Community Of Donors Giving $10 A Month
         </h1>
 
         {/* Subtitle */}
-        <p className="text-muted-foreground text-base md:text-lg max-w-md leading-relaxed">
-          Pool small monthly donations from thousands of individuals to fund
-          high-impact solutions — together.
+        <p className="text-muted-foreground text-base md:text-lg max-w-sm leading-relaxed">
+          For less than your Netflix subscription you can support our work
         </p>
       </div>
     </section>

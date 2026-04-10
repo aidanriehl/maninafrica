@@ -1,13 +1,11 @@
 const StorySection = () => {
   return (
-    <section className="py-10 md:py-16 bg-card">
+    <section className="py-10 md:py-16">
       <div className="container max-w-2xl">
+        <h2 className="font-serif text-2xl md:text-3xl font-bold text-center mb-8">
+          About Me
+        </h2>
         <div className="space-y-6 text-base md:text-lg leading-relaxed text-foreground/90">
-          <p>
-            If my video landed on your feed it probably means you're someone who
-            chooses to not put important things out of sight and mind.
-          </p>
-
           <p>
             I'm 24, and like you, I could not just sit around and watch another
             reel about a homeless 8 year old, or hungry 80 year old.
@@ -40,11 +38,14 @@ const StorySection = () => {
             can do something.
           </p>
 
-          <p className="font-serif text-xl md:text-2xl font-bold text-foreground leading-snug">
-            So I want to tell their story to people who don't see this world.
-            <br />
-            And give them enough funds to help lift them from systemic poverty.
-          </p>
+          {/* Callout */}
+          <div className="bg-primary/10 border-l-4 border-primary rounded-r-xl px-6 py-5 my-4">
+            <p className="font-serif text-xl md:text-2xl font-bold text-foreground leading-snug">
+              So I want to tell their story to people who don't see this world.
+              <br />
+              And give them enough funds to help lift them from systemic poverty.
+            </p>
+          </div>
         </div>
       </div>
     </section>
