@@ -39,39 +39,37 @@ const SpotlightSection = () => {
           </p>
         </div>
 
-        {/* Spotlight card */}
-        <div className="bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden">
-          {/* Video area */}
-          {spotlight.video_url && (
-            <div className="aspect-[9/14] bg-black">
-              <video
-                src={spotlight.video_url}
-                className="w-full h-full object-cover"
-                controls
-                playsInline
-              />
-            </div>
-          )}
+        {/* Horizontal scrollable spotlight cards */}
+        <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide -mx-4 px-4">
+          {/* Spotlight card */}
+          <div className="flex-shrink-0 w-64 bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden snap-center">
+            {/* Video/thumbnail area */}
+            {spotlight.video_url && (
+              <div className="aspect-[9/12] bg-black relative">
+                <video
+                  src={spotlight.video_url}
+                  className="w-full h-full object-cover"
+                  controls
+                  playsInline
+                />
+              </div>
+            )}
 
-          {/* Content area */}
-          <div className="p-5">
-            <h3 className="font-serif text-xl font-bold mb-2">{spotlight.title}</h3>
-            <div className="flex flex-wrap gap-2 mb-3">
+            {/* Content area */}
+            <div className="p-4">
+              <h3 className="font-serif text-lg font-bold mb-2">{spotlight.title}</h3>
               {spotlight.description && (
-                <span className="inline-block px-3 py-1 border border-foreground rounded-full text-sm">
+                <span className="inline-block px-3 py-1 border border-foreground rounded-full text-xs mb-3">
                   {spotlight.description}
                 </span>
               )}
-              <span className="inline-block px-3 py-1 border border-foreground rounded-full text-sm">
-                420 campaign donors
-              </span>
+              <a
+                href="#donate"
+                className="block w-full mt-3 py-2.5 bg-green-100 text-foreground rounded-xl font-bold text-center text-sm hover:bg-green-200 transition-colors border-2 border-foreground"
+              >
+                DONATE
+              </a>
             </div>
-            <a
-              href="#donate"
-              className="block w-full mt-4 py-3 bg-green-100 text-foreground rounded-xl font-bold text-center text-lg hover:bg-green-200 transition-colors border-2 border-foreground"
-            >
-              DONATE
-            </a>
           </div>
         </div>
       </div>
