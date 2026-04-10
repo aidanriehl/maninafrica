@@ -5,6 +5,20 @@ import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
+interface Campaign {
+  id: string;
+  title: string;
+  thumbnail_url: string;
+  video_url: string | null;
+}
+
+interface Spotlight {
+  id: string;
+  title: string;
+  video_url: string | null;
+  description: string | null;
+}
+
 const fallbackVideos = [
   { id: "1", title: "Feeding 100 Families", thumbnail_url: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=300&h=500&fit=crop", video_url: "#" },
   { id: "2", title: "Clean Water for a Village", thumbnail_url: "https://images.unsplash.com/photo-1594708767771-a7502209ff51?w=300&h=500&fit=crop", video_url: "#" },
@@ -14,15 +28,37 @@ const fallbackVideos = [
   { id: "6", title: "Medical Bills Covered", thumbnail_url: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=300&h=500&fit=crop", video_url: "#" },
 ];
 
+const CampaignCard = ({ campaign }: { campaign: Campaign }) => (
+  <a href={campaign.video_url || "#"} className="group" target="_blank" rel="noopener noreferrer">
+    <div className="relative rounded-xl overflow-hidden aspect-[9/16] shadow-md group-hover:shadow-lg transition-shadow">
+      <img src={campaign.thumbnail_url} alt={campaign.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+      <div className="absolute inset-0 bg-foreground/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="w-12 h-12 bg-background/80 rounded-full flex items-center justify-center">
+          <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-foreground ml-0.5"><path d="M8 5v14l11-7z" /></svg>
+        </div>
+      </div>
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-foreground/70 to-transparent p-3">
+        <p className="text-primary-foreground text-xs font-bold leading-tight">{campaign.title}</p>
+      </div>
+    </div>
+  </a>
+);
+
 const Campaigns = () => {
-  const [campaigns, setCampaigns] = useState(fallbackVideos);
+  const [campaigns, setCampaigns] = useState<Campaign[]>(fallbackVideos);
+  const [currentCampaign, setCurrentCampaign] = useState<Spotlight | null>(null);
 
   useEffect(() => {
-    const fetch = async () => {
-      const { data } = await supabase.from("campaigns").select("*").order("created_at", { ascending: false });
-      if (data && data.length > 0) setCampaigns(data);
+    const fetchData = async () => {
+      // Fetch all campaigns
+      const { data: campaignsData } = await supabase.from("campaigns").select("*").order("created_at", { ascending: false });
+      if (campaignsData && campaignsData.length > 0) setCampaigns(campaignsData);
+
+      // Fetch current spotlight campaign
+      const { data: spotlightData } = await supabase.from("spotlight").select("*").order("created_at", { ascending: false }).limit(1);
+      if (spotlightData && spotlightData.length > 0) setCurrentCampaign(spotlightData[0]);
     };
-    fetch();
+    fetchData();
   }, []);
 
   return (
@@ -33,24 +69,43 @@ const Campaigns = () => {
           <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6">
             <ArrowLeft size={16} /> Back
           </Link>
-          <h1 className="font-serif text-2xl md:text-3xl font-bold mb-8">All Campaigns</h1>
-          <div className="grid grid-cols-3 gap-3 sm:gap-4">
-            {campaigns.map((video) => (
-              <a key={video.id} href={video.video_url || "#"} className="group" target="_blank" rel="noopener noreferrer">
-                <div className="relative rounded-xl overflow-hidden aspect-[9/16] shadow-md group-hover:shadow-lg transition-shadow">
-                  <img src={video.thumbnail_url} alt={video.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
-                  <div className="absolute inset-0 bg-foreground/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="w-12 h-12 bg-background/80 rounded-full flex items-center justify-center">
-                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-foreground ml-0.5"><path d="M8 5v14l11-7z" /></svg>
-                    </div>
+
+          {/* Current Campaign Section */}
+          {currentCampaign && (
+            <section className="mb-12">
+              <h2 className="font-serif text-2xl md:text-3xl font-bold mb-6">Current Campaign</h2>
+              <div className="bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden max-w-sm">
+                {currentCampaign.video_url && (
+                  <div className="aspect-[9/12] bg-black">
+                    <video
+                      src={currentCampaign.video_url}
+                      className="w-full h-full object-cover"
+                      controls
+                      playsInline
+                    />
                   </div>
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-foreground/70 to-transparent p-3">
-                    <p className="text-primary-foreground text-xs font-bold leading-tight">{video.title}</p>
-                  </div>
+                )}
+                <div className="p-4">
+                  <h3 className="font-serif text-lg font-bold mb-2">{currentCampaign.title}</h3>
+                  {currentCampaign.description && (
+                    <span className="inline-block px-3 py-1 bg-[#f9d65c] border border-foreground rounded-full text-xs">
+                      {currentCampaign.description}
+                    </span>
+                  )}
                 </div>
-              </a>
-            ))}
-          </div>
+              </div>
+            </section>
+          )}
+
+          {/* All Campaigns Section */}
+          <section>
+            <h2 className="font-serif text-2xl md:text-3xl font-bold mb-6">All Campaigns</h2>
+            <div className="grid grid-cols-3 gap-3 sm:gap-4">
+              {campaigns.map((campaign) => (
+                <CampaignCard key={campaign.id} campaign={campaign} />
+              ))}
+            </div>
+          </section>
         </div>
       </main>
       <Footer />
