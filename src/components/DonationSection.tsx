@@ -45,11 +45,7 @@ const DonationSection = () => {
           ))}
         </div>
 
-        {/* GiveButter widget placeholder */}
-        <div className="bg-secondary/60 border-2 border-dashed border-border rounded-xl p-8 text-center">
-          <p className="text-muted-foreground text-sm mb-4">
-            GiveButter donation widget will go here
-          </p>
+        <div className="text-center">
           <a
             href="#"
             className="inline-block px-8 py-3 bg-primary text-primary-foreground rounded-full font-bold text-base hover:opacity-90 transition-opacity"
