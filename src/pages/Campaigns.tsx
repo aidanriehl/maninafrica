@@ -88,7 +88,7 @@ const Campaigns = () => {
                 <div className="p-4">
                   <h3 className="font-serif text-lg font-bold mb-2">{currentCampaign.title}</h3>
                   {currentCampaign.description && (
-                    <span className="inline-block px-3 py-1 bg-[#fb4572] border border-foreground rounded-full text-xs">
+                    <span className="inline-block px-3 py-1 bg-[#d3ffd9] border border-foreground rounded-full text-xs">
                       {currentCampaign.description}
                     </span>
                   )}
