@@ -59,7 +59,7 @@ const SpotlightSection = () => {
             <div className="p-4">
               <h3 className="font-serif text-lg font-bold mb-2">{spotlight.title}</h3>
               {spotlight.description && (
-                <span className="inline-block px-3 py-1 bg-[#f9d65c] border border-foreground rounded-full text-xs mb-3">
+                <span className="inline-block px-3 py-1 bg-[#fb4572] border border-foreground rounded-full text-xs mb-3">
                   {spotlight.description}
                 </span>
               )}
