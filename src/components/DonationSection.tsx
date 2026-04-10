@@ -39,7 +39,7 @@ const DonationSection = () => {
             <div key={i} className="flex-1">
               <div className="relative bg-secondary rounded-2xl p-5 text-center border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))]">
                 <p className="text-3xl md:text-4xl font-bold text-primary">{stat.value}</p>
-                <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
+                <p className="text-sm text-muted-foreground mt-1 whitespace-nowrap">{stat.label}</p>
               </div>
             </div>
           ))}
