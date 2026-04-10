@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Play } from "lucide-react";
 
 interface Spotlight {
   id: string;
@@ -68,28 +67,16 @@ const SpotlightSection = () => {
 
         {/* Spotlight card - image 10 style */}
         <div className="bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden">
-          {/* Video preview area - uses embed as thumbnail with clickable overlay */}
-          {embedUrl && directUrl && (
-            <div className="relative aspect-[9/14] overflow-hidden">
-              {/* Instagram embed as background preview (non-interactive) */}
+          {/* Video area - interactive Instagram embed */}
+          {embedUrl && (
+            <div className="aspect-[9/14] overflow-hidden">
               <iframe
                 src={embedUrl}
-                className="absolute inset-0 w-full h-full pointer-events-none"
+                className="w-full h-full"
                 title={spotlight.title}
                 style={{ border: 'none' }}
+                allowFullScreen
               />
-              {/* Clickable overlay that opens in new tab */}
-              <a
-                href={directUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="absolute inset-0 z-10 flex items-center justify-center group cursor-pointer bg-black/0 hover:bg-black/10 transition-colors"
-              >
-                {/* Play button */}
-                <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                  <Play className="w-7 h-7 text-primary ml-1" fill="currentColor" />
-                </div>
-              </a>
             </div>
           )}
 
@@ -108,7 +95,7 @@ const SpotlightSection = () => {
                 rel="noopener noreferrer"
                 className="block w-full mt-4 py-3 bg-green-100 text-foreground rounded-xl font-bold text-center text-lg hover:bg-green-200 transition-colors border-2 border-foreground"
               >
-                WATCH
+                VIEW ON INSTAGRAM
               </a>
             )}
           </div>
