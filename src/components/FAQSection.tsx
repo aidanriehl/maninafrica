@@ -51,7 +51,7 @@ const faqs = [
         <br />
         <p>Aidan's a 24 y/o from Hawaii and fundraising wiz. He reached out because he saw one of my videos and wanted to help grow my nonprofit.</p>
         <br />
-        <p>You can reach out to us anytime at hello@1manwithcam.com</p>
+        <p>Together we're growing 1ManWithCam to help those less fortunate.</p>
       </>
     ),
   },

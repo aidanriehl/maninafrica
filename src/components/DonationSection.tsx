@@ -14,20 +14,17 @@ const DonationSection = () => {
 
         {/* Community stats with 3D effect */}
         <div className="flex gap-4 mb-8">
-          <div className="flex-1 relative">
-            <div className="absolute inset-0 bg-foreground rounded-2xl translate-y-1.5 translate-x-0.5" />
-            <div className="relative bg-secondary rounded-2xl p-5 text-center border-2 border-foreground">
-              <p className="text-3xl md:text-4xl font-bold text-primary">{members.toLocaleString()}</p>
-              <p className="text-sm text-muted-foreground mt-1">Community Members</p>
+          {[
+            { value: members.toLocaleString(), label: "Community Members" },
+            { value: `$${totalDonated.toLocaleString()}`, label: "Donated So Far" },
+          ].map((stat, i) => (
+            <div key={i} className="flex-1">
+              <div className="relative bg-secondary rounded-2xl p-5 text-center border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))]">
+                <p className="text-3xl md:text-4xl font-bold text-primary">{stat.value}</p>
+                <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
+              </div>
             </div>
-          </div>
-          <div className="flex-1 relative">
-            <div className="absolute inset-0 bg-foreground rounded-2xl translate-y-1.5 translate-x-0.5" />
-            <div className="relative bg-secondary rounded-2xl p-5 text-center border-2 border-foreground">
-              <p className="text-3xl md:text-4xl font-bold text-primary">${totalDonated.toLocaleString()}</p>
-              <p className="text-sm text-muted-foreground mt-1">Donated So Far</p>
-            </div>
-          </div>
+          ))}
         </div>
 
         {/* GiveButter widget placeholder */}

@@ -34,7 +34,7 @@ const Campaigns = () => {
             <ArrowLeft size={16} /> Back
           </Link>
           <h1 className="font-serif text-2xl md:text-3xl font-bold mb-8">All Campaigns</h1>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-3 sm:gap-4">
             {campaigns.map((video) => (
               <a key={video.id} href={video.video_url || "#"} className="group" target="_blank" rel="noopener noreferrer">
                 <div className="relative rounded-xl overflow-hidden aspect-[9/16] shadow-md group-hover:shadow-lg transition-shadow">
