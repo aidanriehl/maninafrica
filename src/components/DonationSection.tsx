@@ -34,7 +34,7 @@ const DonationSection = () => {
         <div className="flex gap-4 mb-8">
           {[
             { value: donors.toLocaleString(), label: "Donors" },
-            { value: `$${totalDonated.toLocaleString()}`, label: "Donated So Far" },
+            { value: `$${totalDonated.toLocaleString()}`, label: "Recurring Donations" },
           ].map((stat, i) => (
             <div key={i} className="flex-1">
               <div className="relative bg-secondary rounded-2xl p-5 text-center border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))]">
