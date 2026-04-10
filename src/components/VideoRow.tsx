@@ -1,3 +1,7 @@
+import { Link } from "react-router-dom";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useRef } from "react";
+
 const videos = [
   { id: 1, title: "Feeding 100 Families", thumbnail: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=300&h=500&fit=crop" },
   { id: 2, title: "Clean Water for a Village", thumbnail: "https://images.unsplash.com/photo-1594708767771-a7502209ff51?w=300&h=500&fit=crop" },
@@ -8,51 +12,82 @@ const videos = [
 ];
 
 const VideoRow = () => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: "left" | "right") => {
+    if (!scrollRef.current) return;
+    const amount = 200;
+    scrollRef.current.scrollBy({ left: direction === "left" ? -amount : amount, behavior: "smooth" });
+  };
+
   return (
-    <section className="py-12 md:py-16 bg-card overflow-hidden">
+    <section className="py-12 md:py-16 overflow-hidden">
       <div className="container mb-6">
         <h2 className="font-serif text-2xl md:text-3xl font-bold text-center">
-          Watch the Impact
+          Past Campaigns
         </h2>
         <p className="text-center text-muted-foreground mt-2">
-          Every video is tied to a campaign. Tap to watch.
+          Every video is tied to a campaign.
+          <br />
+          Tap to watch.
         </p>
       </div>
 
-      {/* Scrolling row */}
-      <div className="flex gap-4 animate-scroll-left hover:[animation-play-state:paused]" style={{ width: "max-content" }}>
-        {[...videos, ...videos].map((video, i) => (
-          <a
-            key={i}
-            href="#"
-            className="flex-shrink-0 w-40 md:w-48 group"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <div className="relative rounded-xl overflow-hidden aspect-[9/16] shadow-md group-hover:shadow-lg transition-shadow">
-              <img
-                src={video.thumbnail}
-                alt={video.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                loading="lazy"
-                width={300}
-                height={500}
-              />
-              {/* Play icon overlay */}
-              <div className="absolute inset-0 bg-foreground/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="w-12 h-12 bg-background/80 rounded-full flex items-center justify-center">
-                  <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-foreground ml-0.5">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
+      {/* Scroll controls */}
+      <div className="container relative">
+        <button
+          onClick={() => scroll("left")}
+          className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-9 h-9 bg-background/80 backdrop-blur rounded-full flex items-center justify-center shadow-md border border-border hover:bg-background transition-colors"
+          aria-label="Scroll left"
+        >
+          <ChevronLeft size={18} />
+        </button>
+        <button
+          onClick={() => scroll("right")}
+          className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-9 h-9 bg-background/80 backdrop-blur rounded-full flex items-center justify-center shadow-md border border-border hover:bg-background transition-colors"
+          aria-label="Scroll right"
+        >
+          <ChevronRight size={18} />
+        </button>
+
+        <div ref={scrollRef} className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-2" style={{ scrollbarWidth: "none" }}>
+          {videos.map((video) => (
+            <a
+              key={video.id}
+              href="#"
+              className="flex-shrink-0 w-40 md:w-48 group snap-start"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div className="relative rounded-xl overflow-hidden aspect-[9/16] shadow-md group-hover:shadow-lg transition-shadow">
+                <img
+                  src={video.thumbnail}
+                  alt={video.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                  width={300}
+                  height={500}
+                />
+                <div className="absolute inset-0 bg-foreground/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="w-12 h-12 bg-background/80 rounded-full flex items-center justify-center">
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-foreground ml-0.5">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-foreground/70 to-transparent p-3">
+                  <p className="text-primary-foreground text-xs font-bold leading-tight">{video.title}</p>
                 </div>
               </div>
-              {/* Instagram-style gradient */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-foreground/70 to-transparent p-3">
-                <p className="text-primary-foreground text-xs font-bold leading-tight">{video.title}</p>
-              </div>
-            </div>
-          </a>
-        ))}
+            </a>
+          ))}
+        </div>
+
+        <div className="text-center mt-6">
+          <Link to="/campaigns" className="text-sm font-bold text-primary hover:underline">
+            See All →
+          </Link>
+        </div>
       </div>
     </section>
   );

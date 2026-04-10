@@ -1,33 +1,27 @@
 const DonationSection = () => {
-  const raised = 4200;
-  const goal = 10000;
-  const percent = Math.round((raised / goal) * 100);
+  const members = 420;
+  const totalDonated = 38500;
 
   return (
     <section id="donate" className="py-12 md:py-20">
       <div className="container max-w-lg">
         <h2 className="font-serif text-2xl md:text-3xl font-bold text-center mb-2">
-          Join the Circle
+          Become a Supporter
         </h2>
         <p className="text-center text-muted-foreground mb-8">
-          $10/month — 100% goes directly to people in need.
+          100% goes directly to people in need
         </p>
 
-        {/* Progress bar */}
-        <div className="mb-6">
-          <div className="flex justify-between text-sm mb-2">
-            <span className="font-bold">${raised.toLocaleString()} raised</span>
-            <span className="text-muted-foreground">${goal.toLocaleString()} goal</span>
+        {/* Community stats */}
+        <div className="flex gap-4 mb-8">
+          <div className="flex-1 bg-primary/10 rounded-xl p-5 text-center">
+            <p className="text-3xl md:text-4xl font-bold text-primary">{members.toLocaleString()}</p>
+            <p className="text-sm text-muted-foreground mt-1">Community Members</p>
           </div>
-          <div className="w-full h-3 bg-secondary rounded-full overflow-hidden">
-            <div
-              className="h-full bg-primary rounded-full transition-all duration-700"
-              style={{ width: `${percent}%` }}
-            />
+          <div className="flex-1 bg-primary/10 rounded-xl p-5 text-center">
+            <p className="text-3xl md:text-4xl font-bold text-primary">${totalDonated.toLocaleString()}</p>
+            <p className="text-sm text-muted-foreground mt-1">Donated So Far</p>
           </div>
-          <p className="text-xs text-muted-foreground mt-1 text-center">
-            {percent}% of monthly goal
-          </p>
         </div>
 
         {/* GiveButter widget placeholder */}

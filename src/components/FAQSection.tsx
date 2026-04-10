@@ -17,9 +17,9 @@ const faqs = [
       "Yes. Every dollar is tracked and every campaign is documented on video. You can see exactly where your money goes through our monthly impact reports and the videos posted on Instagram. We also partner with registered nonprofits and use transparent payment platforms like GiveButter so you always have a receipt.",
   },
   {
-    question: "Can I give more or volunteer?",
+    question: "Can I give more or partner?",
     answer:
-      "Absolutely! If you want to give more than $10/month you can set a custom amount through the donation widget above. If you'd like to volunteer your time or skills — whether that's on-the-ground help, translations, design, or outreach — reach out through the contact link and we'll get you connected.",
+      "Absolutely! If you want to give more than $10/month you can set a custom amount through the donation widget above. If you'd like to partner with us — whether that's on-the-ground help, translations, design, or outreach — reach out through the contact link and we'll get you connected.",
   },
 ];
 
@@ -28,14 +28,14 @@ const FAQSection = () => {
     <section className="py-12 md:py-16">
       <div className="container max-w-2xl">
         <h2 className="font-serif text-2xl md:text-3xl font-bold text-center mb-8">
-          Questions? We got you.
+          Got Questions?
         </h2>
         <Accordion type="single" collapsible className="space-y-3">
           {faqs.map((faq, i) => (
             <AccordionItem
               key={i}
               value={`faq-${i}`}
-              className="bg-card border border-border rounded-xl px-5 overflow-hidden"
+              className="bg-secondary/40 border border-border rounded-xl px-5 overflow-hidden"
             >
               <AccordionTrigger className="text-left font-bold text-base hover:no-underline py-5">
                 {faq.question}
