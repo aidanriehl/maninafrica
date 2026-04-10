@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -34,10 +34,10 @@ const VideoRow = () => {
   const doubled = [...campaigns, ...campaigns];
 
   return (
-    <section className="py-12 md:py-16 overflow-hidden">
+    <section className="py-8 md:py-12 overflow-hidden">
       <div className="container mb-6">
-        <h2 className="font-serif text-2xl md:text-3xl font-bold text-center flex items-center justify-center gap-2">
-          Past Campaigns <ChevronDown size={24} className="text-muted-foreground" />
+        <h2 className="font-serif text-2xl md:text-3xl font-bold text-center">
+          Past Campaigns 👇
         </h2>
         <p className="text-center text-muted-foreground mt-2">
           Every video is tied to a campaign.

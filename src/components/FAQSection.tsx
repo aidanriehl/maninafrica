@@ -7,25 +7,35 @@ import {
 
 const faqs = [
   {
-    question: "How do you make money?",
-    answer:
-      "I don't take a salary from the circle. 100% of your $10/month goes directly to nonprofits, individuals, and communities in need. I make my personal income through brand partnerships, sponsorships, and ad revenue on my content — completely separate from this fund.",
+    question: "How do you make money if 100% of our proceeds are donated?",
+    answer: (
+      <>
+        <p>Currently, I'm using my savings to support myself. In the future, I hope to be sponsored by brands who want to partner on philanthropy.</p>
+        <br />
+        <p>I don't often advertise this publicly, but you can also support me individually here (I will add a link in the future)</p>
+      </>
+    ),
   },
   {
     question: "Are you legit?",
-    answer:
-      "Yes. Every dollar is tracked and every campaign is documented on video. You can see exactly where your money goes through our monthly impact reports and the videos posted on Instagram. We also partner with registered nonprofits and use transparent payment platforms like GiveButter so you always have a receipt.",
+    answer: (
+      <>
+        <p>Every donation is processed through GiveButter, a third-party platform that creates a paper trail we can't alter or delete. If we misused funds, it would be legally actionable.</p>
+        <br />
+        <p>We're also in the process of becoming a registered 501c3, which adds formal government oversight and adds trust for donors like you.</p>
+      </>
+    ),
   },
   {
-    question: "Can I give more or partner?",
+    question: "How can I get involved or volunteer?",
     answer:
-      "Absolutely! If you want to give more than $10/month you can set a custom amount through the donation widget above. If you'd like to partner with us — whether that's on-the-ground help, translations, design, or outreach — reach out through the contact link and we'll get you connected.",
+      "It means so much that you want to get involved. We're a small team and could use all the help. If you contact us at hello@1manwithcam.com we will always respond :)",
   },
 ];
 
 const FAQSection = () => {
   return (
-    <section className="py-12 md:py-16">
+    <section className="py-8 md:py-12">
       <div className="container max-w-2xl">
         <h2 className="font-serif text-2xl md:text-3xl font-bold text-center mb-8">
           Got Questions?
