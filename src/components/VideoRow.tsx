@@ -59,6 +59,7 @@ const CampaignCard = ({ campaign }: { campaign: Campaign }) => (
 const VideoRow = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [campaigns, setCampaigns] = useState<Campaign[]>(fallbackVideos);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
     const fetchCampaigns = async () => {
@@ -70,8 +71,28 @@ const VideoRow = () => {
     fetchCampaigns();
   }, []);
 
+  // Auto-scroll effect
+  useEffect(() => {
+    if (isPaused || !scrollRef.current) return;
+
+    const interval = setInterval(() => {
+      if (scrollRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+        // Reset to start when reaching end
+        if (scrollLeft + clientWidth >= scrollWidth - 10) {
+          scrollRef.current.scrollTo({ left: 0, behavior: "smooth" });
+        } else {
+          scrollRef.current.scrollBy({ left: 280, behavior: "smooth" });
+        }
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [isPaused]);
+
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
+    setIsPaused(true);
     scrollRef.current.scrollBy({ left: direction === "left" ? -280 : 280, behavior: "smooth" });
   };
 
@@ -99,6 +120,9 @@ const VideoRow = () => {
         <div
           ref={scrollRef}
           className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide px-4"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={() => setIsPaused(true)}
         >
           {campaigns.map((campaign) => (
             <div key={campaign.id} className="snap-center">
@@ -108,7 +132,7 @@ const VideoRow = () => {
         </div>
 
         <div className="text-center mt-6">
-          <Link to="/campaigns" className="text-sm font-bold text-primary hover:underline">See All →</Link>
+          <Link to="/campaigns" className="text-base font-bold text-primary hover:underline">See All →</Link>
         </div>
       </div>
     </section>
