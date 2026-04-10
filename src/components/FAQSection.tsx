@@ -29,7 +29,7 @@ const faqs = [
   {
     question: "How can I get involved?",
     answer:
-      "It means so much that you want to get involved. We're a small team and could use all the help. If you contact us at hello@1manwithcam.com we will always respond :)",
+      "It means so much that you want to get involved. We're a small team and could use all the help. If you contact us at hello@1maninafrica.com we will always respond :)",
   },
   {
     question: "Is my donation tax deductible?",
@@ -39,7 +39,7 @@ const faqs = [
   {
     question: "Can I suggest a person or cause that needs help?",
     answer:
-      "Please! Contact us at hello@1manwithcam.com. We respond to every email.",
+      "Please! Contact us at hello@1maninafrica.com. We respond to every email.",
   },
   {
     question: "Who's on your team? What's your story?",
@@ -51,7 +51,7 @@ const faqs = [
         <br />
         <p>Aidan's a 24 y/o from Hawaii and fundraising wiz. He reached out because he saw one of my videos and wanted to help grow my nonprofit.</p>
         <br />
-        <p>Together we're growing 1ManWithCam to help those less fortunate.</p>
+        <p>Together we're growing 1ManInAfrica to help those less fortunate.</p>
       </>
     ),
   },

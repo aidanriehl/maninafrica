@@ -20,7 +20,7 @@ const Header = () => {
           </a>
         </div>
         <h1 className="text-xl font-serif font-bold tracking-tight text-foreground">
-          1ManWithCam
+          1ManInAfrica
         </h1>
         <a
           href="#manage"
