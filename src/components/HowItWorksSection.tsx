@@ -3,8 +3,7 @@ const HowItWorksSection = () => {
     <section className="py-6 md:py-8">
       <div className="container max-w-lg">
         <div className="relative">
-          <div className="absolute inset-0 bg-foreground rounded-2xl translate-y-1.5 translate-x-0.5" />
-          <div className="relative bg-background rounded-2xl p-6 md:p-8 border-2 border-foreground text-center">
+          <div className="relative bg-white rounded-2xl p-6 md:p-8 border-2 border-foreground text-center shadow-[4px_6px_0px_0px_hsl(var(--foreground))]">
             <h2 className="font-serif text-xl md:text-2xl font-bold mb-3">
               How This Works
             </h2>
