@@ -1,24 +1,7 @@
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-
 const DonationSection = () => {
-  const [donors, setDonors] = useState(0);
-  const [totalDonated, setTotalDonated] = useState(0);
-
-  useEffect(() => {
-    const fetchStats = async () => {
-      const { data } = await supabase
-        .from("site_stats")
-        .select("*")
-        .limit(1)
-        .single();
-      if (data) {
-        setDonors(data.donors ?? 0);
-        setTotalDonated(data.total_donated ?? 0);
-      }
-    };
-    fetchStats();
-  }, []);
+  // Hardcoded stats - update these values directly
+  const donors = 420;
+  const totalDonated = 38500;
 
   return (
     <section id="donate" className="py-8 md:py-12">

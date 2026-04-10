@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Trash2, Plus, LogOut, Star, Save, Users } from "lucide-react";
+import { Trash2, Plus, LogOut, Star, Save } from "lucide-react";
 
 interface Campaign {
   id: string;
@@ -16,13 +16,6 @@ interface Spotlight {
   video_url: string | null;
   more_link: string | null;
   description: string | null;
-  thumbnail_url: string | null;
-}
-
-interface SiteStats {
-  id: string;
-  donors: number;
-  total_donated: number;
 }
 
 const Admin = () => {
@@ -36,23 +29,15 @@ const Admin = () => {
   // Spotlight state
   const [spotlight, setSpotlight] = useState<Spotlight | null>(null);
   const [spotTitle, setSpotTitle] = useState("");
-  const [spotThumbnailUrl, setSpotThumbnailUrl] = useState("");
   const [spotVideoUrl, setSpotVideoUrl] = useState("");
   const [spotMoreLink, setSpotMoreLink] = useState("");
   const [spotDescription, setSpotDescription] = useState("");
   const [spotSaving, setSpotSaving] = useState(false);
 
-  // Site stats state
-  const [siteStats, setSiteStats] = useState<SiteStats | null>(null);
-  const [statsDonors, setStatsDonors] = useState(0);
-  const [statsTotalDonated, setStatsTotalDonated] = useState(0);
-  const [statsSaving, setStatsSaving] = useState(false);
-
   useEffect(() => {
     checkAuth();
     fetchCampaigns();
     fetchSpotlight();
-    fetchSiteStats();
   }, []);
 
   const checkAuth = async () => {
@@ -82,32 +67,10 @@ const Admin = () => {
       const s = data[0];
       setSpotlight(s);
       setSpotTitle(s.title);
-      setSpotThumbnailUrl(s.thumbnail_url || "");
       setSpotVideoUrl(s.video_url || "");
       setSpotMoreLink(s.more_link || "");
       setSpotDescription(s.description || "");
     }
-  };
-
-  const fetchSiteStats = async () => {
-    const { data } = await supabase.from("site_stats").select("*").limit(1).single();
-    if (data) {
-      setSiteStats(data);
-      setStatsDonors(data.donors);
-      setStatsTotalDonated(data.total_donated);
-    }
-  };
-
-  const saveStats = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!siteStats) return;
-    setStatsSaving(true);
-    await supabase.from("site_stats").update({
-      donors: statsDonors,
-      total_donated: statsTotalDonated,
-    }).eq("id", siteStats.id);
-    await fetchSiteStats();
-    setStatsSaving(false);
   };
 
   const saveSpotlight = async (e: React.FormEvent) => {
@@ -117,7 +80,6 @@ const Admin = () => {
 
     const payload = {
       title: spotTitle,
-      thumbnail_url: spotThumbnailUrl || null,
       video_url: spotVideoUrl || null,
       more_link: spotMoreLink || null,
       description: spotDescription || null,
@@ -162,36 +124,6 @@ const Admin = () => {
           </button>
         </div>
 
-        {/* Site Stats management */}
-        <form onSubmit={saveStats} className="bg-green-500/10 rounded-xl p-5 mb-8 space-y-3 border border-green-500/20">
-          <h2 className="font-bold text-sm mb-2 flex items-center gap-2">
-            <Users size={16} className="text-green-600" /> Site Stats
-          </h2>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="text-xs text-muted-foreground mb-1 block">Donors</label>
-              <input
-                type="number"
-                value={statsDonors}
-                onChange={(e) => setStatsDonors(Number(e.target.value))}
-                className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
-              />
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground mb-1 block">Total Donated ($)</label>
-              <input
-                type="number"
-                value={statsTotalDonated}
-                onChange={(e) => setStatsTotalDonated(Number(e.target.value))}
-                className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
-              />
-            </div>
-          </div>
-          <button type="submit" disabled={statsSaving} className="px-5 py-2.5 bg-green-600 text-white rounded-lg text-sm font-bold hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center gap-1">
-            <Save size={14} /> {statsSaving ? "Saving..." : "Update Stats"}
-          </button>
-        </form>
-
         {/* Spotlight management */}
         <form onSubmit={saveSpotlight} className="bg-primary/10 rounded-xl p-5 mb-8 space-y-3 border border-primary/20">
           <h2 className="font-bold text-sm mb-2 flex items-center gap-2">
@@ -214,14 +146,7 @@ const Admin = () => {
           />
           <input
             type="url"
-            placeholder="Thumbnail image URL"
-            value={spotThumbnailUrl}
-            onChange={(e) => setSpotThumbnailUrl(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
-          />
-          <input
-            type="url"
-            placeholder="Video URL (Instagram link - opens when clicked)"
+            placeholder="Instagram video URL"
             value={spotVideoUrl}
             onChange={(e) => setSpotVideoUrl(e.target.value)}
             className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"

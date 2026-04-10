@@ -41,37 +41,12 @@ export type Database = {
         }
         Relationships: []
       }
-      site_stats: {
-        Row: {
-          id: string
-          donors: number
-          total_donated: number
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          donors?: number
-          total_donated?: number
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          donors?: number
-          total_donated?: number
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
       spotlight: {
         Row: {
           created_at: string
           description: string | null
           id: string
           more_link: string | null
-          thumbnail_url: string | null
           title: string
           updated_at: string
           video_url: string | null
@@ -81,7 +56,6 @@ export type Database = {
           description?: string | null
           id?: string
           more_link?: string | null
-          thumbnail_url?: string | null
           title: string
           updated_at?: string
           video_url?: string | null
@@ -91,7 +65,6 @@ export type Database = {
           description?: string | null
           id?: string
           more_link?: string | null
-          thumbnail_url?: string | null
           title?: string
           updated_at?: string
           video_url?: string | null

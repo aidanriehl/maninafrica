@@ -8,7 +8,6 @@ interface Spotlight {
   video_url: string | null;
   more_link: string | null;
   description: string | null;
-  thumbnail_url: string | null;
 }
 
 // Convert Instagram URL to embed URL
