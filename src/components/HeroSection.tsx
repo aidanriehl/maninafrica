@@ -2,7 +2,7 @@ import creatorImg from "@/assets/creator-portrait.jpg";
 
 const HeroSection = () => {
   return (
-    <section className="py-10 md:py-16">
+    <section className="py-8 md:py-12">
       <div className="container flex flex-col items-center text-center">
         {/* Creator Image */}
         <div className="relative mb-8">

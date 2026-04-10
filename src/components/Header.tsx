@@ -7,15 +7,6 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
       <div className="container flex items-center justify-between py-4">
-        <a
-          href="#donate"
-          className="px-5 py-2.5 bg-primary text-primary-foreground rounded-full text-sm font-bold hover:opacity-90 transition-opacity"
-        >
-          Join — $10/mo
-        </a>
-        <h1 className="text-xl font-serif font-bold tracking-tight text-foreground">
-          1ManWithCam
-        </h1>
         <button
           className="sm:hidden p-2"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -23,6 +14,15 @@ const Header = () => {
         >
           {menuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
+        <h1 className="text-xl font-serif font-bold tracking-tight text-foreground">
+          1ManWithCam
+        </h1>
+        <a
+          href="#donate"
+          className="px-5 py-2.5 bg-primary text-primary-foreground rounded-full text-sm font-bold hover:opacity-90 transition-opacity"
+        >
+          Join — $10/mo
+        </a>
         <div className="hidden sm:flex items-center gap-3">
           <a href="#contact" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
             Contact
