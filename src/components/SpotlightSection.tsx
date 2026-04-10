@@ -51,7 +51,7 @@ const SpotlightSection = () => {
           Campaign In The Spotlight 👇
         </h2>
         <p className="text-center text-muted-foreground text-sm mb-6">
-          All donations are going towards supporting this individual/issue
+          all current donations are going towards supporting this individual/issue
         </p>
 
         <div className="relative">
