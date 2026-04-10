@@ -26,7 +26,8 @@ const Header = () => {
           href="#manage"
           className="px-3 py-1.5 sm:px-5 sm:py-2.5 bg-primary text-primary-foreground rounded-full text-xs sm:text-sm font-bold hover:opacity-90 transition-opacity whitespace-nowrap"
         >
-          Manage
+          <span className="sm:hidden">Manage</span>
+          <span className="hidden sm:inline">Manage Subscription</span>
         </a>
       </div>
       {menuOpen && (
