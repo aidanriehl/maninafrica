@@ -57,10 +57,10 @@ const SpotlightSection = () => {
       <div className="container max-w-md">
         {/* Title box */}
         <div className="bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] p-5 mb-6 text-center">
-          <h2 className="font-serif text-2xl md:text-3xl font-bold mb-2 whitespace-nowrap">
+          <h2 className="font-serif text-xl md:text-2xl font-bold mb-2">
             Campaign In The Spotlight 👇
           </h2>
-          <p className="text-muted-foreground text-base md:text-lg">
+          <p className="text-muted-foreground text-sm md:text-base">
             all current donations are going towards supporting this individual/issue
           </p>
         </div>
