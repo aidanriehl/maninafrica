@@ -41,6 +41,30 @@ export type Database = {
         }
         Relationships: []
       }
+      site_stats: {
+        Row: {
+          id: string
+          donors: number
+          total_donated: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          donors?: number
+          total_donated?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          donors?: number
+          total_donated?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       spotlight: {
         Row: {
           created_at: string

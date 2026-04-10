@@ -9,6 +9,22 @@ interface Spotlight {
   description: string | null;
 }
 
+// Convert Instagram URL to embed URL
+const getInstagramEmbedUrl = (url: string): string => {
+  // Already an embed URL
+  if (url.includes("/embed")) return url;
+
+  // Match Instagram post/reel URLs
+  const match = url.match(/instagram\.com\/(p|reel|reels)\/([A-Za-z0-9_-]+)/);
+  if (match) {
+    const [, type, id] = match;
+    const embedType = type === "reels" ? "reel" : type;
+    return `https://www.instagram.com/${embedType}/${id}/embed/`;
+  }
+
+  return url;
+};
+
 const SpotlightSection = () => {
   const [spotlight, setSpotlight] = useState<Spotlight | null>(null);
 
@@ -25,6 +41,8 @@ const SpotlightSection = () => {
   }, []);
 
   if (!spotlight) return null;
+
+  const embedUrl = spotlight.video_url ? getInstagramEmbedUrl(spotlight.video_url) : null;
 
   return (
     <section className="py-6 md:py-8">
@@ -45,10 +63,10 @@ const SpotlightSection = () => {
               )}
             </div>
 
-            {spotlight.video_url && (
+            {embedUrl && (
               <div className="aspect-[9/16] max-h-[480px] bg-foreground/5">
                 <iframe
-                  src={spotlight.video_url}
+                  src={embedUrl}
                   className="w-full h-full"
                   allowFullScreen
                   allow="autoplay; encrypted-media"

@@ -1,6 +1,24 @@
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+
 const DonationSection = () => {
-  const members = 420;
-  const totalDonated = 38500;
+  const [donors, setDonors] = useState(0);
+  const [totalDonated, setTotalDonated] = useState(0);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      const { data } = await supabase
+        .from("site_stats")
+        .select("*")
+        .limit(1)
+        .single();
+      if (data) {
+        setDonors(data.donors ?? 0);
+        setTotalDonated(data.total_donated ?? 0);
+      }
+    };
+    fetchStats();
+  }, []);
 
   return (
     <section id="donate" className="py-8 md:py-12">
@@ -9,13 +27,13 @@ const DonationSection = () => {
           Become a Supporter
         </h2>
         <p className="text-center text-muted-foreground mb-8">
-          100% goes to giving
+          100% goes to giving.
         </p>
 
         {/* Community stats with 3D effect */}
         <div className="flex gap-4 mb-8">
           {[
-            { value: members.toLocaleString(), label: "Community Members" },
+            { value: donors.toLocaleString(), label: "Donors" },
             { value: `$${totalDonated.toLocaleString()}`, label: "Donated So Far" },
           ].map((stat, i) => (
             <div key={i} className="flex-1">
