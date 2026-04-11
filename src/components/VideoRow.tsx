@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface Campaign {
@@ -61,6 +61,7 @@ const VideoRow = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>(fallbackVideos);
   const [isPaused, setIsPaused] = useState(false);
   const pauseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const autoScrollRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const fetchCampaigns = async () => {
@@ -71,6 +72,37 @@ const VideoRow = () => {
     };
     fetchCampaigns();
   }, []);
+
+  // Auto-scroll using JS instead of CSS animation
+  const autoScroll = useCallback(() => {
+    if (!scrollRef.current || isPaused) return;
+
+    const container = scrollRef.current;
+    const maxScroll = container.scrollWidth - container.clientWidth;
+
+    // Scroll by 1px for smooth continuous movement
+    if (container.scrollLeft >= maxScroll) {
+      container.scrollLeft = 0;
+    } else {
+      container.scrollLeft += 1;
+    }
+  }, [isPaused]);
+
+  useEffect(() => {
+    if (!isPaused) {
+      autoScrollRef.current = setInterval(autoScroll, 30);
+    } else {
+      if (autoScrollRef.current) {
+        clearInterval(autoScrollRef.current);
+      }
+    }
+
+    return () => {
+      if (autoScrollRef.current) {
+        clearInterval(autoScrollRef.current);
+      }
+    };
+  }, [isPaused, autoScroll]);
 
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
@@ -123,18 +155,17 @@ const VideoRow = () => {
       </div>
 
       <div className="relative">
-        <button onClick={() => scroll("left")} className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-9 h-9 bg-background/80 backdrop-blur rounded-full flex items-center justify-center shadow-md border border-border hover:bg-background transition-colors" aria-label="Scroll left">
+        <button onClick={() => scroll("left")} className="absolute left-2 top-[40%] -translate-y-1/2 z-10 w-9 h-9 bg-background/80 backdrop-blur rounded-full flex items-center justify-center shadow-md border border-border hover:bg-background transition-colors" aria-label="Scroll left">
           <ChevronLeft size={18} />
         </button>
-        <button onClick={() => scroll("right")} className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-9 h-9 bg-background/80 backdrop-blur rounded-full flex items-center justify-center shadow-md border border-border hover:bg-background transition-colors" aria-label="Scroll right">
+        <button onClick={() => scroll("right")} className="absolute right-2 top-[40%] -translate-y-1/2 z-10 w-9 h-9 bg-background/80 backdrop-blur rounded-full flex items-center justify-center shadow-md border border-border hover:bg-background transition-colors" aria-label="Scroll right">
           <ChevronRight size={18} />
         </button>
 
         <div
           ref={scrollRef}
-          className={`flex gap-4 pb-4 px-4 overflow-x-scroll scrollbar-hide ${isPaused ? '' : 'animate-scroll-left'}`}
+          className="flex gap-4 pb-4 px-4 overflow-x-scroll"
           style={{
-            width: isPaused ? undefined : "max-content",
             scrollbarWidth: 'none',
             msOverflowStyle: 'none'
           }}
