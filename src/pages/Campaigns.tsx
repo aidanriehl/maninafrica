@@ -79,7 +79,7 @@ const Campaigns = () => {
           {/* Current Campaign Section */}
           {currentCampaign && (
             <section className="mb-12">
-              <h2 className="font-serif text-2xl md:text-3xl font-bold mb-6">Current Campaign</h2>
+              <h2 className="font-serif text-2xl md:text-3xl font-bold mb-6">Spotlight Campaign</h2>
               <div className="bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden max-w-sm">
                 {currentCampaign.video_url && (
                   <div className="aspect-[9/12] bg-black">
