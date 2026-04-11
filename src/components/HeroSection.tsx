@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import creatorImg from "@/assets/creator-portrait.jpg";
 
 const HeroSection = () => {
@@ -30,13 +31,21 @@ const HeroSection = () => {
           Most people never donate, but for less than your Netflix sub you can support our work
         </p>
 
-        {/* Donate button */}
-        <a
-          href="#donate"
-          className="px-8 py-3 bg-primary text-primary-foreground rounded-full font-bold text-base hover:opacity-90 transition-opacity"
-        >
-          Donate — Join for $10/mo
-        </a>
+        {/* Donate buttons */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <a
+            href="#donate"
+            className="px-8 py-3 bg-primary text-primary-foreground rounded-full font-bold text-base hover:opacity-90 transition-opacity"
+          >
+            Donate to Our Fund
+          </a>
+          <Link
+            to="/campaigns"
+            className="px-8 py-3 bg-transparent text-primary border-2 border-primary rounded-full font-bold text-base hover:bg-primary/10 transition-colors"
+          >
+            Donate to a Specific Campaign
+          </Link>
+        </div>
       </div>
     </section>
   );
