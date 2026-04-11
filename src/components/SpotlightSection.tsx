@@ -61,18 +61,18 @@ const SpotlightSection = () => {
 
   return (
     <section className="py-6 md:py-8">
-      <div className="container max-w-md">
-        {/* Title section */}
-        <div className="bg-[#d3ffd9] rounded-xl px-4 py-3 mb-6 text-center">
-          <h2 className="font-serif text-xl md:text-2xl font-bold mb-1">
-            Campaign In The Spotlight 👇
-          </h2>
-          <p className="text-foreground/70 text-sm md:text-base">
-            all current donations are going towards supporting this individual/issue
-          </p>
-        </div>
+      {/* Title section - full width */}
+      <div className="bg-[#d3ffd9] py-6 mb-6 text-center">
+        <h2 className="font-serif text-2xl md:text-3xl font-bold mb-2">
+          Campaign In The Spotlight 👇
+        </h2>
+        <p className="text-foreground/70 text-base md:text-lg">
+          all current donations are going towards supporting this individual/issue
+        </p>
+      </div>
 
-        {/* Spotlight cards */}
+      {/* Spotlight cards */}
+      <div className="container max-w-md">
         <div className={`flex gap-4 pb-4 ${isSingle ? 'justify-center' : 'overflow-x-auto snap-x snap-mandatory scrollbar-hide -mx-4 px-4'}`}>
           {spotlights.map((spotlight) => (
             <SpotlightCard key={spotlight.id} spotlight={spotlight} />

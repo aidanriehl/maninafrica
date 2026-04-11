@@ -18,7 +18,7 @@ const fallbackVideos: Campaign[] = [
 ];
 
 const CampaignCard = ({ campaign }: { campaign: Campaign }) => (
-  <div className="flex-shrink-0 w-64 bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden">
+  <div className="flex-shrink-0 w-52 bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden">
     {/* Video/thumbnail area */}
     <div className="aspect-[9/12] bg-black relative">
       {campaign.video_url && campaign.video_url !== "#" ? (
@@ -135,7 +135,7 @@ const VideoRow = () => {
     // Resume after a short delay
     pauseTimeoutRef.current = setTimeout(() => {
       setIsPaused(false);
-    }, 1000);
+    }, 500);
   };
 
   // Double the campaigns for seamless loop
@@ -143,15 +143,13 @@ const VideoRow = () => {
 
   return (
     <section className="py-8 md:py-12 overflow-hidden">
-      <div className="container max-w-md mb-6">
-        <div className="bg-[#d3ffd9] rounded-xl px-4 py-3 text-center">
-          <h2 className="font-serif text-xl md:text-2xl font-bold mb-1">
-            Past Campaigns 👇
-          </h2>
-          <p className="text-foreground/70 text-sm md:text-base">
-            Every video is tied to a campaign. Tap to watch.
-          </p>
-        </div>
+      <div className="bg-[#d3ffd9] py-6 mb-6 text-center">
+        <h2 className="font-serif text-2xl md:text-3xl font-bold mb-2">
+          Past Campaigns 👇
+        </h2>
+        <p className="text-foreground/70 text-base md:text-lg">
+          Every video is tied to a campaign. Tap to watch.
+        </p>
       </div>
 
       <div className="relative">
