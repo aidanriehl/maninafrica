@@ -71,8 +71,8 @@ const FAQSection = () => {
               value={`faq-${i}`}
               className="bg-secondary/40 border border-border rounded-xl px-5 overflow-hidden"
             >
-              <AccordionTrigger className="text-left font-bold text-base hover:no-underline py-5">
-                <span className="flex items-start gap-3">
+              <AccordionTrigger className="text-left font-bold text-lg hover:no-underline py-5">
+                <span className="flex items-start gap-3 pr-4">
                   <span className="text-primary font-bold">{i + 1}.</span>
                   <span>{faq.question}</span>
                 </span>
