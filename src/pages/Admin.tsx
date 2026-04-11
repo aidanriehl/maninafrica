@@ -146,7 +146,7 @@ const Admin = () => {
           />
           <input
             type="url"
-            placeholder="Instagram video URL"
+            placeholder="Video URL"
             value={spotVideoUrl}
             onChange={(e) => setSpotVideoUrl(e.target.value)}
             className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
@@ -184,7 +184,7 @@ const Admin = () => {
           />
           <input
             type="url"
-            placeholder="Video URL (Instagram link)"
+            placeholder="Video URL (optional)"
             value={videoUrl}
             onChange={(e) => setVideoUrl(e.target.value)}
             className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
