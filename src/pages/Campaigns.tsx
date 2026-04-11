@@ -87,7 +87,7 @@ const Campaigns = () => {
       <Header />
       <main className="flex-1 py-10">
         <div className="container max-w-5xl">
-          <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6">
+          <Link to="/" className="inline-flex items-center gap-2 text-lg font-bold text-primary hover:underline mb-6">
             <ArrowLeft size={16} /> Back
           </Link>
 
@@ -127,7 +127,7 @@ const Campaigns = () => {
           {/* All Campaigns Section */}
           <section>
             <h2 className="font-serif text-2xl md:text-3xl font-bold mb-6">All Campaigns</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-3 sm:gap-4">
               {campaigns.map((campaign) => (
                 <CampaignCard key={campaign.id} campaign={campaign} />
               ))}

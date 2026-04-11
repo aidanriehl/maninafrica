@@ -71,30 +71,14 @@ const VideoRow = () => {
     fetchCampaigns();
   }, []);
 
-  // Auto-scroll effect
-  useEffect(() => {
-    if (isPaused || !scrollRef.current) return;
-
-    const interval = setInterval(() => {
-      if (scrollRef.current) {
-        const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-        // Reset to start when reaching end
-        if (scrollLeft + clientWidth >= scrollWidth - 10) {
-          scrollRef.current.scrollTo({ left: 0, behavior: "smooth" });
-        } else {
-          scrollRef.current.scrollBy({ left: 280, behavior: "smooth" });
-        }
-      }
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [isPaused]);
-
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
     setIsPaused(true);
     scrollRef.current.scrollBy({ left: direction === "left" ? -280 : 280, behavior: "smooth" });
   };
+
+  // Double the campaigns for seamless loop
+  const doubled = [...campaigns, ...campaigns];
 
   return (
     <section className="py-8 md:py-12 overflow-hidden">
@@ -119,20 +103,21 @@ const VideoRow = () => {
 
         <div
           ref={scrollRef}
-          className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide px-4"
+          className={`flex gap-4 pb-4 px-4 ${isPaused ? 'overflow-x-auto' : 'animate-scroll-left overflow-hidden'}`}
+          style={{ width: isPaused ? undefined : "max-content" }}
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
           onTouchStart={() => setIsPaused(true)}
         >
-          {campaigns.map((campaign) => (
-            <div key={campaign.id} className="snap-center">
+          {doubled.map((campaign, i) => (
+            <div key={`${campaign.id}-${i}`} className="flex-shrink-0">
               <CampaignCard campaign={campaign} />
             </div>
           ))}
         </div>
 
         <div className="text-center mt-6">
-          <Link to="/campaigns" className="text-base font-bold text-primary hover:underline">See All →</Link>
+          <Link to="/campaigns" className="text-lg font-bold text-primary hover:underline">See All →</Link>
         </div>
       </div>
     </section>
