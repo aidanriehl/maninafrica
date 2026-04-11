@@ -9,22 +9,55 @@ interface Spotlight {
   description: string | null;
 }
 
+const SpotlightCard = ({ spotlight }: { spotlight: Spotlight }) => (
+  <div className="flex-shrink-0 w-64 bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden snap-center">
+    {/* Video/thumbnail area */}
+    {spotlight.video_url && (
+      <div className="aspect-[9/12] bg-black relative">
+        <video
+          src={spotlight.video_url}
+          className="w-full h-full object-cover"
+          controls
+          playsInline
+        />
+      </div>
+    )}
+
+    {/* Content area */}
+    <div className="p-4">
+      <h3 className="font-serif text-lg font-bold mb-2">{spotlight.title}</h3>
+      {spotlight.description && (
+        <span className="inline-block px-3 py-1 bg-[#d3ffd9] border border-foreground rounded-full text-xs mb-3">
+          {spotlight.description}
+        </span>
+      )}
+      <a
+        href="#donate"
+        className="block w-full mt-3 py-2.5 bg-[#efc738] text-foreground rounded-xl font-bold text-center text-sm hover:bg-[#ddb52e] transition-colors border-2 border-foreground"
+      >
+        DONATE
+      </a>
+    </div>
+  </div>
+);
+
 const SpotlightSection = () => {
-  const [spotlight, setSpotlight] = useState<Spotlight | null>(null);
+  const [spotlights, setSpotlights] = useState<Spotlight[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await supabase
         .from("spotlight")
         .select("*")
-        .order("created_at", { ascending: false })
-        .limit(1);
-      if (data && data.length > 0) setSpotlight(data[0]);
+        .order("created_at", { ascending: false });
+      if (data && data.length > 0) setSpotlights(data);
     };
     fetchData();
   }, []);
 
-  if (!spotlight) return null;
+  if (spotlights.length === 0) return null;
+
+  const isSingle = spotlights.length === 1;
 
   return (
     <section className="py-6 md:py-8">
@@ -39,38 +72,11 @@ const SpotlightSection = () => {
           </p>
         </div>
 
-        {/* Horizontal scrollable spotlight cards */}
-        <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide -mx-4 px-4">
-          {/* Spotlight card */}
-          <div className="flex-shrink-0 w-64 bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden snap-center">
-            {/* Video/thumbnail area */}
-            {spotlight.video_url && (
-              <div className="aspect-[9/12] bg-black relative">
-                <video
-                  src={spotlight.video_url}
-                  className="w-full h-full object-cover"
-                  controls
-                  playsInline
-                />
-              </div>
-            )}
-
-            {/* Content area */}
-            <div className="p-4">
-              <h3 className="font-serif text-lg font-bold mb-2">{spotlight.title}</h3>
-              {spotlight.description && (
-                <span className="inline-block px-3 py-1 bg-[#d3ffd9] border border-foreground rounded-full text-xs mb-3">
-                  {spotlight.description}
-                </span>
-              )}
-              <a
-                href="#donate"
-                className="block w-full mt-3 py-2.5 bg-[#efc738] text-foreground rounded-xl font-bold text-center text-sm hover:bg-[#ddb52e] transition-colors border-2 border-foreground"
-              >
-                DONATE
-              </a>
-            </div>
-          </div>
+        {/* Spotlight cards */}
+        <div className={`flex gap-4 pb-4 ${isSingle ? 'justify-center' : 'overflow-x-auto snap-x snap-mandatory scrollbar-hide -mx-4 px-4'}`}>
+          {spotlights.map((spotlight) => (
+            <SpotlightCard key={spotlight.id} spotlight={spotlight} />
+          ))}
         </div>
       </div>
     </section>
