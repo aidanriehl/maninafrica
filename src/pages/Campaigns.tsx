@@ -76,13 +76,13 @@ const Campaigns = () => {
             <ArrowLeft size={16} /> Back
           </Link>
 
-          {/* Current Campaign Section */}
+          {/* Spotlight Campaign Section */}
           {currentCampaign && (
-            <section className="mb-12">
-              <h2 className="font-serif text-2xl md:text-3xl font-bold mb-6">Spotlight Campaign</h2>
-              <div className="bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden max-w-sm">
+            <section className="mb-8">
+              <h2 className="font-serif text-xl md:text-2xl font-bold mb-4">Spotlight Campaign</h2>
+              <div className="bg-white rounded-xl border-2 border-foreground shadow-[3px_4px_0px_0px_hsl(var(--foreground))] overflow-hidden w-40">
                 {currentCampaign.video_url && (
-                  <div className="aspect-[9/12] bg-black">
+                  <div className="aspect-square bg-black">
                     <video
                       src={currentCampaign.video_url}
                       className="w-full h-full object-cover"
@@ -91,16 +91,16 @@ const Campaigns = () => {
                     />
                   </div>
                 )}
-                <div className="p-4">
-                  <h3 className="font-serif text-lg font-bold mb-2">{currentCampaign.title}</h3>
+                <div className="p-2">
+                  <h3 className="font-serif text-xs font-bold leading-tight mb-1">{currentCampaign.title}</h3>
                   {currentCampaign.description && (
-                    <span className="inline-block px-3 py-1 bg-[#d3ffd9] border border-foreground rounded-full text-xs mb-3">
+                    <span className="inline-block px-2 py-0.5 bg-[#d3ffd9] border border-foreground rounded-full text-[10px] mb-2">
                       {currentCampaign.description}
                     </span>
                   )}
                   <a
                     href="#donate"
-                    className="block w-full mt-3 py-2.5 bg-[#efc738] text-foreground rounded-xl font-bold text-center text-sm hover:bg-[#ddb52e] transition-colors border-2 border-foreground"
+                    className="block w-full py-1.5 bg-[#efc738] text-foreground rounded-lg font-bold text-center text-[10px] hover:bg-[#ddb52e] transition-colors border border-foreground"
                   >
                     DONATE
                   </a>
