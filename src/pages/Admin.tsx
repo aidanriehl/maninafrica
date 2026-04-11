@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Trash2, Plus, LogOut, Star, Save } from "lucide-react";
+import { Trash2, Plus, LogOut, Star, Save, Upload } from "lucide-react";
 
 interface Campaign {
   id: string;
@@ -21,15 +21,16 @@ interface Spotlight {
 const Admin = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [title, setTitle] = useState("");
-  const [thumbnailUrl, setThumbnailUrl] = useState("");
-  const [videoUrl, setVideoUrl] = useState("");
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
+  const [videoFile, setVideoFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
 
   // Spotlight state
   const [spotlight, setSpotlight] = useState<Spotlight | null>(null);
   const [spotTitle, setSpotTitle] = useState("");
-  const [spotVideoUrl, setSpotVideoUrl] = useState("");
+  const [spotVideoFile, setSpotVideoFile] = useState<File | null>(null);
   const [spotMoreLink, setSpotMoreLink] = useState("");
   const [spotDescription, setSpotDescription] = useState("");
   const [spotSaving, setSpotSaving] = useState(false);
@@ -67,10 +68,23 @@ const Admin = () => {
       const s = data[0];
       setSpotlight(s);
       setSpotTitle(s.title);
-      setSpotVideoUrl(s.video_url || "");
       setSpotMoreLink(s.more_link || "");
       setSpotDescription(s.description || "");
     }
+  };
+
+  const uploadFile = async (file: File, bucket: string, folder: string): Promise<string | null> => {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${folder}/${Date.now()}.${fileExt}`;
+
+    const { error } = await supabase.storage.from(bucket).upload(fileName, file);
+    if (error) {
+      console.error("Upload error:", error);
+      return null;
+    }
+
+    const { data } = supabase.storage.from(bucket).getPublicUrl(fileName);
+    return data.publicUrl;
   };
 
   const saveSpotlight = async (e: React.FormEvent) => {
@@ -78,9 +92,16 @@ const Admin = () => {
     if (!spotTitle) return;
     setSpotSaving(true);
 
+    let videoUrl = spotlight?.video_url || null;
+
+    if (spotVideoFile) {
+      const uploadedUrl = await uploadFile(spotVideoFile, "videos", "spotlight");
+      if (uploadedUrl) videoUrl = uploadedUrl;
+    }
+
     const payload = {
       title: spotTitle,
-      video_url: spotVideoUrl || null,
+      video_url: videoUrl,
       more_link: spotMoreLink || null,
       description: spotDescription || null,
     };
@@ -91,16 +112,36 @@ const Admin = () => {
       await supabase.from("spotlight").insert(payload);
     }
     await fetchSpotlight();
+    setSpotVideoFile(null);
     setSpotSaving(false);
   };
 
   const addCampaign = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !thumbnailUrl) return;
-    await supabase.from("campaigns").insert({ title, thumbnail_url: thumbnailUrl, video_url: videoUrl || null });
+    if (!title || !thumbnailFile) return;
+    setUploading(true);
+
+    const thumbnailUrl = await uploadFile(thumbnailFile, "images", "thumbnails");
+    if (!thumbnailUrl) {
+      setUploading(false);
+      return;
+    }
+
+    let videoUrl = null;
+    if (videoFile) {
+      videoUrl = await uploadFile(videoFile, "videos", "campaigns");
+    }
+
+    await supabase.from("campaigns").insert({
+      title,
+      thumbnail_url: thumbnailUrl,
+      video_url: videoUrl
+    });
+
     setTitle("");
-    setThumbnailUrl("");
-    setVideoUrl("");
+    setThumbnailFile(null);
+    setVideoFile(null);
+    setUploading(false);
     fetchCampaigns();
   };
 
@@ -144,16 +185,24 @@ const Admin = () => {
             onChange={(e) => setSpotDescription(e.target.value)}
             className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
           />
+          <div className="space-y-1">
+            <label className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-border bg-background text-sm cursor-pointer hover:bg-secondary/20">
+              <Upload size={16} />
+              <span>{spotVideoFile ? spotVideoFile.name : "Upload video"}</span>
+              <input
+                type="file"
+                accept="video/*"
+                onChange={(e) => setSpotVideoFile(e.target.files?.[0] || null)}
+                className="hidden"
+              />
+            </label>
+            {spotlight?.video_url && !spotVideoFile && (
+              <p className="text-xs text-muted-foreground px-1">Current video uploaded</p>
+            )}
+          </div>
           <input
             type="url"
-            placeholder="Video URL"
-            value={spotVideoUrl}
-            onChange={(e) => setSpotVideoUrl(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
-          />
-          <input
-            type="url"
-            placeholder="More link URL"
+            placeholder="More link URL (optional)"
             value={spotMoreLink}
             onChange={(e) => setSpotMoreLink(e.target.value)}
             className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
@@ -174,23 +223,29 @@ const Admin = () => {
             className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
             required
           />
-          <input
-            type="url"
-            placeholder="Thumbnail URL (image)"
-            value={thumbnailUrl}
-            onChange={(e) => setThumbnailUrl(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
-            required
-          />
-          <input
-            type="url"
-            placeholder="Video URL (optional)"
-            value={videoUrl}
-            onChange={(e) => setVideoUrl(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
-          />
-          <button type="submit" className="px-5 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-bold hover:opacity-90 transition-opacity">
-            Add Campaign
+          <label className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-border bg-background text-sm cursor-pointer hover:bg-secondary/20">
+            <Upload size={16} />
+            <span>{thumbnailFile ? thumbnailFile.name : "Upload thumbnail image *"}</span>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setThumbnailFile(e.target.files?.[0] || null)}
+              className="hidden"
+              required
+            />
+          </label>
+          <label className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-border bg-background text-sm cursor-pointer hover:bg-secondary/20">
+            <Upload size={16} />
+            <span>{videoFile ? videoFile.name : "Upload video (optional)"}</span>
+            <input
+              type="file"
+              accept="video/*"
+              onChange={(e) => setVideoFile(e.target.files?.[0] || null)}
+              className="hidden"
+            />
+          </label>
+          <button type="submit" disabled={uploading} className="px-5 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-bold hover:opacity-90 transition-opacity disabled:opacity-50">
+            {uploading ? "Uploading..." : "Add Campaign"}
           </button>
         </form>
 
@@ -207,7 +262,7 @@ const Admin = () => {
                 <img src={c.thumbnail_url} alt={c.title} className="w-12 h-16 rounded-lg object-cover" />
                 <div className="flex-1 min-w-0">
                   <p className="font-bold text-sm truncate">{c.title}</p>
-                  {c.video_url && <p className="text-xs text-muted-foreground truncate">{c.video_url}</p>}
+                  {c.video_url && <p className="text-xs text-muted-foreground">Video uploaded</p>}
                 </div>
                 <button onClick={() => deleteCampaign(c.id)} className="p-2 text-destructive hover:bg-destructive/10 rounded-lg transition-colors">
                   <Trash2 size={16} />
