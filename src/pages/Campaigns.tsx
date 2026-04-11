@@ -27,37 +27,22 @@ const fallbackVideos: Campaign[] = [
 ];
 
 const CampaignCard = ({ campaign }: { campaign: Campaign }) => (
-  <div className="bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden">
-    {/* Video/thumbnail area */}
-    <div className="aspect-[9/12] bg-black relative">
-      {campaign.video_url && campaign.video_url !== "#" ? (
-        <video
-          src={campaign.video_url}
-          className="w-full h-full object-cover"
-          controls
-          playsInline
-          poster={campaign.thumbnail_url}
-        />
-      ) : (
-        <img
-          src={campaign.thumbnail_url}
-          alt={campaign.title}
-          className="w-full h-full object-cover"
-        />
-      )}
+  <div className="bg-white rounded-xl border-2 border-foreground shadow-[3px_4px_0px_0px_hsl(var(--foreground))] overflow-hidden">
+    {/* Thumbnail area */}
+    <div className="aspect-square bg-black relative">
+      <img
+        src={campaign.thumbnail_url}
+        alt={campaign.title}
+        className="w-full h-full object-cover"
+      />
     </div>
 
     {/* Content area */}
-    <div className="p-4">
-      <h3 className="font-serif text-lg font-bold mb-2">{campaign.title}</h3>
-      {campaign.description && (
-        <span className="inline-block px-3 py-1 bg-[#d3ffd9] border border-foreground rounded-full text-xs mb-3">
-          {campaign.description}
-        </span>
-      )}
+    <div className="p-2">
+      <h3 className="font-serif text-xs sm:text-sm font-bold leading-tight mb-2">{campaign.title}</h3>
       <a
         href="#donate"
-        className="block w-full mt-3 py-2.5 bg-[#efc738] text-foreground rounded-xl font-bold text-center text-sm hover:bg-[#ddb52e] transition-colors border-2 border-foreground"
+        className="block w-full py-1.5 bg-[#efc738] text-foreground rounded-lg font-bold text-center text-[10px] sm:text-xs hover:bg-[#ddb52e] transition-colors border border-foreground"
       >
         DONATE
       </a>
@@ -86,7 +71,7 @@ const Campaigns = () => {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1 py-10">
-        <div className="container max-w-5xl">
+        <div className="container max-w-2xl">
           <Link to="/" className="inline-flex items-center gap-2 text-lg font-bold text-primary hover:underline mb-6">
             <ArrowLeft size={16} /> Back
           </Link>
@@ -127,7 +112,7 @@ const Campaigns = () => {
           {/* All Campaigns Section */}
           <section>
             <h2 className="font-serif text-2xl md:text-3xl font-bold mb-6">All Campaigns</h2>
-            <div className="grid grid-cols-3 gap-3 sm:gap-4">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3">
               {campaigns.map((campaign) => (
                 <CampaignCard key={campaign.id} campaign={campaign} />
               ))}
