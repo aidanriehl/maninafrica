@@ -60,6 +60,7 @@ const VideoRow = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [campaigns, setCampaigns] = useState<Campaign[]>(fallbackVideos);
   const [isPaused, setIsPaused] = useState(false);
+  const pauseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const fetchCampaigns = async () => {
@@ -73,8 +74,36 @@ const VideoRow = () => {
 
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
+
+    // Clear any existing timeout
+    if (pauseTimeoutRef.current) {
+      clearTimeout(pauseTimeoutRef.current);
+    }
+
+    // Pause animation
     setIsPaused(true);
+
+    // Scroll in the direction
     scrollRef.current.scrollBy({ left: direction === "left" ? -280 : 280, behavior: "smooth" });
+
+    // Resume auto-scroll after 3 seconds
+    pauseTimeoutRef.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 3000);
+  };
+
+  const handleMouseEnter = () => {
+    if (pauseTimeoutRef.current) {
+      clearTimeout(pauseTimeoutRef.current);
+    }
+    setIsPaused(true);
+  };
+
+  const handleMouseLeave = () => {
+    // Resume after a short delay
+    pauseTimeoutRef.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 1000);
   };
 
   // Double the campaigns for seamless loop
@@ -103,11 +132,16 @@ const VideoRow = () => {
 
         <div
           ref={scrollRef}
-          className={`flex gap-4 pb-4 px-4 ${isPaused ? 'overflow-x-auto' : 'animate-scroll-left overflow-hidden'}`}
-          style={{ width: isPaused ? undefined : "max-content" }}
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-          onTouchStart={() => setIsPaused(true)}
+          className={`flex gap-4 pb-4 px-4 overflow-x-scroll scrollbar-hide ${isPaused ? '' : 'animate-scroll-left'}`}
+          style={{
+            width: isPaused ? undefined : "max-content",
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none'
+          }}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onTouchStart={handleMouseEnter}
+          onTouchEnd={handleMouseLeave}
         >
           {doubled.map((campaign, i) => (
             <div key={`${campaign.id}-${i}`} className="flex-shrink-0">

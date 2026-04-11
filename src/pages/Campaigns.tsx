@@ -80,7 +80,7 @@ const Campaigns = () => {
           {currentCampaign && (
             <section className="mb-8">
               <h2 className="font-serif text-xl md:text-2xl font-bold mb-4">Spotlight Campaign</h2>
-              <div className="bg-white rounded-xl border-2 border-foreground shadow-[3px_4px_0px_0px_hsl(var(--foreground))] overflow-hidden w-52">
+              <div className="bg-white rounded-xl border-2 border-foreground shadow-[3px_4px_0px_0px_hsl(var(--foreground))] overflow-hidden w-72">
                 {currentCampaign.video_url && (
                   <div className="aspect-square bg-black">
                     <video
@@ -91,16 +91,16 @@ const Campaigns = () => {
                     />
                   </div>
                 )}
-                <div className="p-3">
-                  <h3 className="font-serif text-sm font-bold leading-tight mb-2">{currentCampaign.title}</h3>
+                <div className="p-4">
+                  <h3 className="font-serif text-base font-bold leading-tight mb-2">{currentCampaign.title}</h3>
                   {currentCampaign.description && (
-                    <span className="inline-block px-2 py-0.5 bg-[#d3ffd9] border border-foreground rounded-full text-xs mb-2">
+                    <span className="inline-block px-3 py-1 bg-[#d3ffd9] border border-foreground rounded-full text-xs mb-3">
                       {currentCampaign.description}
                     </span>
                   )}
                   <a
                     href="#donate"
-                    className="block w-full py-2 bg-[#efc738] text-foreground rounded-lg font-bold text-center text-xs hover:bg-[#ddb52e] transition-colors border border-foreground"
+                    className="block w-full py-2.5 bg-[#efc738] text-foreground rounded-lg font-bold text-center text-sm hover:bg-[#ddb52e] transition-colors border border-foreground"
                   >
                     DONATE
                   </a>
