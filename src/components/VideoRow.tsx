@@ -143,15 +143,15 @@ const VideoRow = () => {
 
   return (
     <section className="py-8 md:py-12 overflow-hidden">
-      <div className="container mb-6">
-        <h2 className="font-serif text-2xl md:text-3xl font-bold text-center">
-          Past Campaigns 👇
-        </h2>
-        <p className="text-center text-muted-foreground mt-2">
-          Every video is tied to a campaign.
-          <br />
-          Tap to watch.
-        </p>
+      <div className="container max-w-md mb-6">
+        <div className="bg-[#d3ffd9] rounded-xl px-4 py-3 text-center">
+          <h2 className="font-serif text-xl md:text-2xl font-bold mb-1">
+            Past Campaigns 👇
+          </h2>
+          <p className="text-foreground/70 text-sm md:text-base">
+            Every video is tied to a campaign. Tap to watch.
+          </p>
+        </div>
       </div>
 
       <div className="relative">
