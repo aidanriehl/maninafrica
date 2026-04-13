@@ -25,7 +25,7 @@ const ComicSectionHeader = ({ title, subtitle }: ComicSectionHeaderProps) => {
 
         {/* Main green shape */}
         <svg
-          viewBox="0 0 520 140"
+          viewBox="0 0 520 180"
           className="relative w-[90vw] max-w-[520px] h-auto"
           preserveAspectRatio="none"
         >
