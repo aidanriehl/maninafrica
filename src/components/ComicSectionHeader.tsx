@@ -16,7 +16,7 @@ const ComicSectionHeader = ({ title, subtitle }: ComicSectionHeaderProps) => {
       <div className="relative">
         {/* Shadow layer */}
         <svg
-          viewBox="0 0 520 140"
+          viewBox="0 0 520 180"
           className="absolute top-[5px] left-[5px] w-[90vw] max-w-[520px] h-auto"
           preserveAspectRatio="none"
         >
