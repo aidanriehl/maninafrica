@@ -108,6 +108,10 @@ const VideoRow = () => {
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
 
+    const container = scrollRef.current;
+    const maxScroll = container.scrollWidth - container.clientWidth;
+    const scrollAmount = 280;
+
     // Clear any existing timeout
     if (pauseTimeoutRef.current) {
       clearTimeout(pauseTimeoutRef.current);
@@ -116,8 +120,19 @@ const VideoRow = () => {
     // Pause animation
     setIsPaused(true);
 
-    // Scroll in the direction
-    scrollRef.current.scrollBy({ left: direction === "left" ? -280 : 280, behavior: "smooth" });
+    if (direction === "right") {
+      // If near the end, jump to start first then scroll
+      if (container.scrollLeft >= maxScroll - scrollAmount) {
+        container.scrollLeft = 0;
+      }
+      container.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    } else {
+      // If at the start, jump to end first then scroll
+      if (container.scrollLeft <= scrollAmount) {
+        container.scrollLeft = maxScroll;
+      }
+      container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    }
 
     // Resume auto-scroll after 3 seconds
     pauseTimeoutRef.current = setTimeout(() => {
