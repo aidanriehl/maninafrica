@@ -143,14 +143,10 @@ const VideoRow = () => {
 
   return (
     <section className="py-8 md:py-12 overflow-hidden">
-      <div className="bg-[#d3ffd9] py-6 mb-6 text-center">
-        <h2 className="font-serif text-2xl md:text-3xl font-bold mb-2">
-          Past Campaigns 👇
-        </h2>
-        <p className="text-foreground/70 text-base md:text-lg">
-          Every video is tied to a campaign. Tap to watch.
-        </p>
-      </div>
+      <ComicSectionHeader
+        title="Past Campaigns 👇"
+        subtitle="Every video is tied to a campaign. Tap to watch."
+      />
 
       <div className="relative">
         <button onClick={() => scroll("left")} className="absolute left-2 top-[40%] -translate-y-1/2 z-10 w-9 h-9 bg-background/80 backdrop-blur rounded-full flex items-center justify-center shadow-md border border-border hover:bg-background transition-colors" aria-label="Scroll left">
