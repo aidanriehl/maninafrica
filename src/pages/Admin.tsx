@@ -33,8 +33,14 @@ const Admin = () => {
   const [spotVideoFile, setSpotVideoFile] = useState<File | null>(null);
   const [spotDescription, setSpotDescription] = useState("");
   const [spotSaving, setSpotSaving] = useState(false);
-  const [editingSpotlight, setEditingSpotlight] = useState<Spotlight | null>(null);
   const [draggedSpotlight, setDraggedSpotlight] = useState<string | null>(null);
+
+  // Inline edit state
+  const [editingSpotlightId, setEditingSpotlightId] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [editVideoFile, setEditVideoFile] = useState<File | null>(null);
+  const [editSaving, setEditSaving] = useState(false);
 
   useEffect(() => {
     checkAuth();
@@ -82,53 +88,72 @@ const Admin = () => {
     return data.publicUrl;
   };
 
-  const saveSpotlight = async (e: React.FormEvent) => {
+  const addSpotlight = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!spotTitle) return;
     setSpotSaving(true);
 
-    let videoUrl = editingSpotlight?.video_url || null;
+    let videoUrl = null;
 
     if (spotVideoFile) {
       const uploadedUrl = await uploadFile(spotVideoFile, "videos", "spotlight");
       if (uploadedUrl) videoUrl = uploadedUrl;
     }
 
-    const payload = {
+    await supabase.from("spotlight").insert({
       title: spotTitle,
       video_url: videoUrl,
       description: spotDescription || null,
-    };
+    });
 
-    if (editingSpotlight) {
-      await supabase.from("spotlight").update(payload).eq("id", editingSpotlight.id);
-    } else {
-      await supabase.from("spotlight").insert(payload);
-    }
-
-    clearSpotlightForm();
+    setSpotTitle("");
+    setSpotVideoFile(null);
+    setSpotDescription("");
     setSpotSaving(false);
     fetchSpotlights();
   };
 
   const startEditSpotlight = (s: Spotlight) => {
-    setEditingSpotlight(s);
-    setSpotTitle(s.title);
-    setSpotDescription(s.description || "");
-    setSpotVideoFile(null);
+    setEditingSpotlightId(s.id);
+    setEditTitle(s.title);
+    setEditDescription(s.description || "");
+    setEditVideoFile(null);
   };
 
-  const clearSpotlightForm = () => {
-    setEditingSpotlight(null);
-    setSpotTitle("");
-    setSpotVideoFile(null);
-    setSpotDescription("");
+  const cancelEdit = () => {
+    setEditingSpotlightId(null);
+    setEditTitle("");
+    setEditDescription("");
+    setEditVideoFile(null);
+  };
+
+  const saveEditSpotlight = async (e: React.FormEvent, spotlight: Spotlight) => {
+    e.preventDefault();
+    if (!editTitle) return;
+    setEditSaving(true);
+
+    let videoUrl = spotlight.video_url;
+
+    if (editVideoFile) {
+      const uploadedUrl = await uploadFile(editVideoFile, "videos", "spotlight");
+      if (uploadedUrl) videoUrl = uploadedUrl;
+    }
+
+    await supabase.from("spotlight").update({
+      title: editTitle,
+      video_url: videoUrl,
+      description: editDescription || null,
+    }).eq("id", spotlight.id);
+
+    cancelEdit();
+    setEditSaving(false);
+    fetchSpotlights();
   };
 
   const deleteSpotlight = async (id: string) => {
     await supabase.from("spotlight").delete().eq("id", id);
-    if (editingSpotlight?.id === id) {
-      clearSpotlightForm();
+    if (editingSpotlightId === id) {
+      cancelEdit();
     }
     fetchSpotlights();
   };
@@ -214,18 +239,11 @@ const Admin = () => {
           </button>
         </div>
 
-        {/* Add/Edit Spotlight form */}
-        <form onSubmit={saveSpotlight} className="bg-primary/10 rounded-xl p-5 mb-8 space-y-3 border border-primary/20">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="font-bold text-sm flex items-center gap-2">
-              <Star size={16} className="text-primary" /> {editingSpotlight ? "Edit Spotlight Campaign" : "Add Spotlight Campaign"}
-            </h2>
-            {editingSpotlight && (
-              <button type="button" onClick={clearSpotlightForm} className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1">
-                <X size={14} /> Cancel
-              </button>
-            )}
-          </div>
+        {/* Add Spotlight form */}
+        <form onSubmit={addSpotlight} className="bg-primary/10 rounded-xl p-5 mb-8 space-y-3 border border-primary/20">
+          <h2 className="font-bold text-sm mb-2 flex items-center gap-2">
+            <Star size={16} className="text-primary" /> Add Spotlight Campaign
+          </h2>
           <input
             type="text"
             placeholder="Campaign title"
@@ -241,27 +259,18 @@ const Admin = () => {
             onChange={(e) => setSpotDescription(e.target.value)}
             className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
           />
-          <div className="space-y-1">
-            <label className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-border bg-background text-sm cursor-pointer hover:bg-secondary/20">
-              <Upload size={16} />
-              <span>{spotVideoFile ? spotVideoFile.name : "Upload video"}</span>
-              <input
-                type="file"
-                accept="video/*"
-                onChange={(e) => setSpotVideoFile(e.target.files?.[0] || null)}
-                className="hidden"
-              />
-            </label>
-            {editingSpotlight?.video_url && !spotVideoFile && (
-              <p className="text-xs text-muted-foreground px-1">Current video uploaded</p>
-            )}
-          </div>
+          <label className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-border bg-background text-sm cursor-pointer hover:bg-secondary/20">
+            <Upload size={16} />
+            <span>{spotVideoFile ? spotVideoFile.name : "Upload video"}</span>
+            <input
+              type="file"
+              accept="video/*"
+              onChange={(e) => setSpotVideoFile(e.target.files?.[0] || null)}
+              className="hidden"
+            />
+          </label>
           <button type="submit" disabled={spotSaving} className="px-5 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-bold hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center gap-1">
-            {editingSpotlight ? (
-              <><Save size={14} /> {spotSaving ? "Saving..." : "Update Spotlight"}</>
-            ) : (
-              <><Plus size={14} /> {spotSaving ? "Adding..." : "Add Spotlight"}</>
-            )}
+            <Plus size={14} /> {spotSaving ? "Adding..." : "Add Spotlight"}
           </button>
         </form>
 
@@ -274,30 +283,75 @@ const Admin = () => {
         ) : (
           <div className="space-y-3 mb-8">
             {spotlights.map((s) => (
-              <div
-                key={s.id}
-                draggable
-                onDragStart={() => handleDragStart(s.id)}
-                onDragOver={handleDragOver}
-                onDrop={() => handleDrop(s.id)}
-                className={`flex items-center gap-3 bg-primary/10 rounded-xl p-3 border ${editingSpotlight?.id === s.id ? 'border-primary' : 'border-primary/20'} ${draggedSpotlight === s.id ? 'opacity-50' : ''}`}
-              >
-                <div className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground">
-                  <GripVertical size={18} />
+              <div key={s.id}>
+                <div
+                  draggable={editingSpotlightId !== s.id}
+                  onDragStart={() => handleDragStart(s.id)}
+                  onDragOver={handleDragOver}
+                  onDrop={() => handleDrop(s.id)}
+                  className={`flex items-center gap-3 bg-primary/10 rounded-xl p-3 border ${editingSpotlightId === s.id ? 'border-primary rounded-b-none' : 'border-primary/20'} ${draggedSpotlight === s.id ? 'opacity-50' : ''}`}
+                >
+                  <div className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground">
+                    <GripVertical size={18} />
+                  </div>
+                  <div className="w-12 h-16 rounded-lg bg-black flex items-center justify-center text-white text-xs">
+                    {s.video_url ? "📹" : "—"}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-sm truncate">{s.title}</p>
+                    {s.description && <p className="text-xs text-muted-foreground truncate">{s.description}</p>}
+                  </div>
+                  <button onClick={() => editingSpotlightId === s.id ? cancelEdit() : startEditSpotlight(s)} className="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors">
+                    {editingSpotlightId === s.id ? <X size={16} /> : <Pencil size={16} />}
+                  </button>
+                  <button onClick={() => deleteSpotlight(s.id)} className="p-2 text-destructive hover:bg-destructive/10 rounded-lg transition-colors">
+                    <Trash2 size={16} />
+                  </button>
                 </div>
-                <div className="w-12 h-16 rounded-lg bg-black flex items-center justify-center text-white text-xs">
-                  {s.video_url ? "📹" : "—"}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-bold text-sm truncate">{s.title}</p>
-                  {s.description && <p className="text-xs text-muted-foreground truncate">{s.description}</p>}
-                </div>
-                <button onClick={() => startEditSpotlight(s)} className="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors">
-                  <Pencil size={16} />
-                </button>
-                <button onClick={() => deleteSpotlight(s.id)} className="p-2 text-destructive hover:bg-destructive/10 rounded-lg transition-colors">
-                  <Trash2 size={16} />
-                </button>
+
+                {/* Inline edit form */}
+                {editingSpotlightId === s.id && (
+                  <form onSubmit={(e) => saveEditSpotlight(e, s)} className="bg-primary/5 rounded-b-xl p-4 space-y-3 border border-t-0 border-primary">
+                    <input
+                      type="text"
+                      placeholder="Campaign title"
+                      value={editTitle}
+                      onChange={(e) => setEditTitle(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
+                      required
+                    />
+                    <input
+                      type="text"
+                      placeholder="Cause category"
+                      value={editDescription}
+                      onChange={(e) => setEditDescription(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
+                    />
+                    <div className="space-y-1">
+                      <label className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-border bg-background text-sm cursor-pointer hover:bg-secondary/20">
+                        <Upload size={16} />
+                        <span>{editVideoFile ? editVideoFile.name : "Upload new video"}</span>
+                        <input
+                          type="file"
+                          accept="video/*"
+                          onChange={(e) => setEditVideoFile(e.target.files?.[0] || null)}
+                          className="hidden"
+                        />
+                      </label>
+                      {s.video_url && !editVideoFile && (
+                        <p className="text-xs text-muted-foreground px-1">Current video uploaded</p>
+                      )}
+                    </div>
+                    <div className="flex gap-2">
+                      <button type="submit" disabled={editSaving} className="px-5 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-bold hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center gap-1">
+                        <Save size={14} /> {editSaving ? "Saving..." : "Save Changes"}
+                      </button>
+                      <button type="button" onClick={cancelEdit} className="px-5 py-2.5 bg-secondary text-foreground rounded-lg text-sm font-bold hover:opacity-90 transition-opacity">
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                )}
               </div>
             ))}
           </div>
