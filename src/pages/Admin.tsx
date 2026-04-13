@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Trash2, Plus, LogOut, Star, Save, Upload, Pencil, X } from "lucide-react";
+import { Trash2, Plus, LogOut, Star, Save, Upload, Pencil, X, GripVertical } from "lucide-react";
 
 interface Campaign {
   id: string;
@@ -34,6 +34,7 @@ const Admin = () => {
   const [spotDescription, setSpotDescription] = useState("");
   const [spotSaving, setSpotSaving] = useState(false);
   const [editingSpotlight, setEditingSpotlight] = useState<Spotlight | null>(null);
+  const [draggedSpotlight, setDraggedSpotlight] = useState<string | null>(null);
 
   useEffect(() => {
     checkAuth();
@@ -130,6 +131,38 @@ const Admin = () => {
       clearSpotlightForm();
     }
     fetchSpotlights();
+  };
+
+  const handleDragStart = (id: string) => {
+    setDraggedSpotlight(id);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = async (targetId: string) => {
+    if (!draggedSpotlight || draggedSpotlight === targetId) {
+      setDraggedSpotlight(null);
+      return;
+    }
+
+    const draggedIndex = spotlights.findIndex(s => s.id === draggedSpotlight);
+    const targetIndex = spotlights.findIndex(s => s.id === targetId);
+
+    const newSpotlights = [...spotlights];
+    const [removed] = newSpotlights.splice(draggedIndex, 1);
+    newSpotlights.splice(targetIndex, 0, removed);
+
+    setSpotlights(newSpotlights);
+    setDraggedSpotlight(null);
+
+    // Update order in database by setting new created_at timestamps
+    const now = Date.now();
+    for (let i = 0; i < newSpotlights.length; i++) {
+      const newDate = new Date(now - i * 1000).toISOString();
+      await supabase.from("spotlight").update({ created_at: newDate }).eq("id", newSpotlights[i].id);
+    }
   };
 
   const addCampaign = async (e: React.FormEvent) => {
@@ -241,7 +274,17 @@ const Admin = () => {
         ) : (
           <div className="space-y-3 mb-8">
             {spotlights.map((s) => (
-              <div key={s.id} className={`flex items-center gap-3 bg-primary/10 rounded-xl p-3 border ${editingSpotlight?.id === s.id ? 'border-primary' : 'border-primary/20'}`}>
+              <div
+                key={s.id}
+                draggable
+                onDragStart={() => handleDragStart(s.id)}
+                onDragOver={handleDragOver}
+                onDrop={() => handleDrop(s.id)}
+                className={`flex items-center gap-3 bg-primary/10 rounded-xl p-3 border ${editingSpotlight?.id === s.id ? 'border-primary' : 'border-primary/20'} ${draggedSpotlight === s.id ? 'opacity-50' : ''}`}
+              >
+                <div className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground">
+                  <GripVertical size={18} />
+                </div>
                 <div className="w-12 h-16 rounded-lg bg-black flex items-center justify-center text-white text-xs">
                   {s.video_url ? "📹" : "—"}
                 </div>
