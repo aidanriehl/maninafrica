@@ -18,6 +18,7 @@ interface Spotlight {
   title: string;
   video_url: string | null;
   description: string | null;
+  more_link: string | null;
 }
 
 const fallbackVideos: Campaign[] = [
@@ -70,7 +71,9 @@ const SpotlightCard = ({ spotlight }: { spotlight: Spotlight }) => (
         </span>
       )}
       <a
-        href="#donate"
+        href={spotlight.more_link || "#donate"}
+        target={spotlight.more_link ? "_blank" : undefined}
+        rel={spotlight.more_link ? "noopener noreferrer" : undefined}
         className="block w-full py-1.5 bg-[#efc738] text-foreground rounded-lg font-bold text-center text-[10px] sm:text-xs hover:bg-[#ddb52e] transition-colors border border-foreground"
       >
         DONATE

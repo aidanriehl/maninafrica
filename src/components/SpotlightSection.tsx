@@ -33,7 +33,9 @@ const SpotlightCard = ({ spotlight }: { spotlight: Spotlight }) => (
         </span>
       )}
       <a
-        href="#donate"
+        href={spotlight.more_link || "#donate"}
+        target={spotlight.more_link ? "_blank" : undefined}
+        rel={spotlight.more_link ? "noopener noreferrer" : undefined}
         className="block w-full mt-3 py-2.5 bg-[#efc738] text-foreground rounded-xl font-bold text-center text-sm hover:bg-[#ddb52e] transition-colors border-2 border-foreground"
       >
         DONATE

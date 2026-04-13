@@ -32,6 +32,7 @@ const Admin = () => {
   const [spotTitle, setSpotTitle] = useState("");
   const [spotVideoFile, setSpotVideoFile] = useState<File | null>(null);
   const [spotDescription, setSpotDescription] = useState("");
+  const [spotDonateLink, setSpotDonateLink] = useState("");
   const [spotSaving, setSpotSaving] = useState(false);
   const [draggedSpotlight, setDraggedSpotlight] = useState<string | null>(null);
 
@@ -39,6 +40,7 @@ const Admin = () => {
   const [editingSpotlightId, setEditingSpotlightId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [editDescription, setEditDescription] = useState("");
+  const [editDonateLink, setEditDonateLink] = useState("");
   const [editVideoFile, setEditVideoFile] = useState<File | null>(null);
   const [editSaving, setEditSaving] = useState(false);
 
@@ -104,11 +106,13 @@ const Admin = () => {
       title: spotTitle,
       video_url: videoUrl,
       description: spotDescription || null,
+      more_link: spotDonateLink || null,
     });
 
     setSpotTitle("");
     setSpotVideoFile(null);
     setSpotDescription("");
+    setSpotDonateLink("");
     setSpotSaving(false);
     fetchSpotlights();
   };
@@ -117,6 +121,7 @@ const Admin = () => {
     setEditingSpotlightId(s.id);
     setEditTitle(s.title);
     setEditDescription(s.description || "");
+    setEditDonateLink(s.more_link || "");
     setEditVideoFile(null);
   };
 
@@ -124,6 +129,7 @@ const Admin = () => {
     setEditingSpotlightId(null);
     setEditTitle("");
     setEditDescription("");
+    setEditDonateLink("");
     setEditVideoFile(null);
   };
 
@@ -143,6 +149,7 @@ const Admin = () => {
       title: editTitle,
       video_url: videoUrl,
       description: editDescription || null,
+      more_link: editDonateLink || null,
     }).eq("id", spotlight.id);
 
     cancelEdit();
@@ -259,6 +266,13 @@ const Admin = () => {
             onChange={(e) => setSpotDescription(e.target.value)}
             className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
           />
+          <input
+            type="url"
+            placeholder="Donation link (GoFundMe URL)"
+            value={spotDonateLink}
+            onChange={(e) => setSpotDonateLink(e.target.value)}
+            className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
+          />
           <label className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-border bg-background text-sm cursor-pointer hover:bg-secondary/20">
             <Upload size={16} />
             <span>{spotVideoFile ? spotVideoFile.name : "Upload video"}</span>
@@ -325,6 +339,13 @@ const Admin = () => {
                       placeholder="Cause category"
                       value={editDescription}
                       onChange={(e) => setEditDescription(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
+                    />
+                    <input
+                      type="url"
+                      placeholder="Donation link (GoFundMe URL)"
+                      value={editDonateLink}
+                      onChange={(e) => setEditDonateLink(e.target.value)}
                       className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
                     />
                     <div className="space-y-1">
