@@ -61,7 +61,7 @@ const SpotlightSection = () => {
   const isSingle = spotlights.length === 1;
 
   return (
-    <section className="py-6 md:py-8">
+    <section className="pt-2 pb-6 md:pt-4 md:pb-8">
       <ComicSectionHeader
         title="Campaign In The Spotlight 👇"
         subtitle="all current donations are going towards supporting this individual/issue"
