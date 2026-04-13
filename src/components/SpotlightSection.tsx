@@ -69,8 +69,8 @@ const SpotlightSection = () => {
       />
 
       {/* Spotlight cards */}
-      <div className="container max-w-md">
-        <div className={`flex gap-4 pb-4 ${isSingle ? 'justify-center' : 'overflow-x-auto snap-x snap-mandatory scrollbar-hide -mx-4 px-4'}`}>
+      <div className="mx-auto w-full md:max-w-[66%] px-4">
+        <div className={`flex gap-4 pb-4 ${isSingle ? 'justify-center' : 'justify-center flex-wrap'}`}>
           {spotlights.map((spotlight) => (
             <SpotlightCard key={spotlight.id} spotlight={spotlight} />
           ))}

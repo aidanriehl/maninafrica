@@ -150,7 +150,7 @@ const VideoRow = () => {
         compact
       />
 
-      <div className="relative">
+      <div className="mx-auto w-full md:max-w-[66%] relative">
         <button onClick={() => scroll("left")} className="absolute left-2 top-[40%] -translate-y-1/2 z-10 w-9 h-9 bg-background/80 backdrop-blur rounded-full flex items-center justify-center shadow-md border border-border hover:bg-background transition-colors" aria-label="Scroll left">
           <ChevronLeft size={18} />
         </button>
