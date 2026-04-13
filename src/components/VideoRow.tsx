@@ -147,6 +147,7 @@ const VideoRow = () => {
       <ComicSectionHeader
         title="Past Campaigns 👇"
         subtitle="Every video is tied to a campaign."
+        compact
       />
 
       <div className="relative">
