@@ -203,7 +203,7 @@ const Admin = () => {
           />
           <input
             type="text"
-            placeholder="Description/tag (optional)"
+            placeholder="Cause category"
             value={spotDescription}
             onChange={(e) => setSpotDescription(e.target.value)}
             className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
