@@ -8,7 +8,7 @@ const HowItWorksSection = () => {
               How This Works
             </h2>
             <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
-              You donate $10/month. We go into underserved communities, document real stories, and give 100% of the funds directly to those in need. Every campaign is filmed so you can see your impact.
+              $10/month supports our work across slavery, child poverty, water, etc. However, if you only want to donate to a specific cause, you can do that too.
             </p>
           </div>
         </div>
