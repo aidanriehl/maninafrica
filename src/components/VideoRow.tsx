@@ -146,7 +146,7 @@ const VideoRow = () => {
     <section className="py-8 md:py-12 overflow-hidden">
       <ComicSectionHeader
         title="Past Campaigns 👇"
-        subtitle="Every video is tied to a campaign. Tap to watch."
+        subtitle="Every video is tied to a campaign."
       />
 
       <div className="relative">
