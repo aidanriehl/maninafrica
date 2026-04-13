@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Trash2, Plus, LogOut, Star, Save, Upload } from "lucide-react";
+import { Trash2, Plus, LogOut, Star, Save, Upload, Pencil, X } from "lucide-react";
 
 interface Campaign {
   id: string;
@@ -34,6 +34,7 @@ const Admin = () => {
   const [spotMoreLink, setSpotMoreLink] = useState("");
   const [spotDescription, setSpotDescription] = useState("");
   const [spotSaving, setSpotSaving] = useState(false);
+  const [editingSpotlight, setEditingSpotlight] = useState<Spotlight | null>(null);
 
   useEffect(() => {
     checkAuth();
@@ -81,35 +82,57 @@ const Admin = () => {
     return data.publicUrl;
   };
 
-  const addSpotlight = async (e: React.FormEvent) => {
+  const saveSpotlight = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!spotTitle) return;
     setSpotSaving(true);
 
-    let videoUrl = null;
+    let videoUrl = editingSpotlight?.video_url || null;
 
     if (spotVideoFile) {
       const uploadedUrl = await uploadFile(spotVideoFile, "videos", "spotlight");
       if (uploadedUrl) videoUrl = uploadedUrl;
     }
 
-    await supabase.from("spotlight").insert({
+    const payload = {
       title: spotTitle,
       video_url: videoUrl,
       more_link: spotMoreLink || null,
       description: spotDescription || null,
-    });
+    };
 
-    setSpotTitle("");
-    setSpotVideoFile(null);
-    setSpotMoreLink("");
-    setSpotDescription("");
+    if (editingSpotlight) {
+      await supabase.from("spotlight").update(payload).eq("id", editingSpotlight.id);
+    } else {
+      await supabase.from("spotlight").insert(payload);
+    }
+
+    clearSpotlightForm();
     setSpotSaving(false);
     fetchSpotlights();
   };
 
+  const startEditSpotlight = (s: Spotlight) => {
+    setEditingSpotlight(s);
+    setSpotTitle(s.title);
+    setSpotDescription(s.description || "");
+    setSpotMoreLink(s.more_link || "");
+    setSpotVideoFile(null);
+  };
+
+  const clearSpotlightForm = () => {
+    setEditingSpotlight(null);
+    setSpotTitle("");
+    setSpotVideoFile(null);
+    setSpotMoreLink("");
+    setSpotDescription("");
+  };
+
   const deleteSpotlight = async (id: string) => {
     await supabase.from("spotlight").delete().eq("id", id);
+    if (editingSpotlight?.id === id) {
+      clearSpotlightForm();
+    }
     fetchSpotlights();
   };
 
@@ -162,11 +185,18 @@ const Admin = () => {
           </button>
         </div>
 
-        {/* Add Spotlight form */}
-        <form onSubmit={addSpotlight} className="bg-primary/10 rounded-xl p-5 mb-8 space-y-3 border border-primary/20">
-          <h2 className="font-bold text-sm mb-2 flex items-center gap-2">
-            <Star size={16} className="text-primary" /> Add Spotlight Campaign
-          </h2>
+        {/* Add/Edit Spotlight form */}
+        <form onSubmit={saveSpotlight} className="bg-primary/10 rounded-xl p-5 mb-8 space-y-3 border border-primary/20">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="font-bold text-sm flex items-center gap-2">
+              <Star size={16} className="text-primary" /> {editingSpotlight ? "Edit Spotlight Campaign" : "Add Spotlight Campaign"}
+            </h2>
+            {editingSpotlight && (
+              <button type="button" onClick={clearSpotlightForm} className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1">
+                <X size={14} /> Cancel
+              </button>
+            )}
+          </div>
           <input
             type="text"
             placeholder="Campaign title"
@@ -182,16 +212,21 @@ const Admin = () => {
             onChange={(e) => setSpotDescription(e.target.value)}
             className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
           />
-          <label className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-border bg-background text-sm cursor-pointer hover:bg-secondary/20">
-            <Upload size={16} />
-            <span>{spotVideoFile ? spotVideoFile.name : "Upload video"}</span>
-            <input
-              type="file"
-              accept="video/*"
-              onChange={(e) => setSpotVideoFile(e.target.files?.[0] || null)}
-              className="hidden"
-            />
-          </label>
+          <div className="space-y-1">
+            <label className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-border bg-background text-sm cursor-pointer hover:bg-secondary/20">
+              <Upload size={16} />
+              <span>{spotVideoFile ? spotVideoFile.name : "Upload video"}</span>
+              <input
+                type="file"
+                accept="video/*"
+                onChange={(e) => setSpotVideoFile(e.target.files?.[0] || null)}
+                className="hidden"
+              />
+            </label>
+            {editingSpotlight?.video_url && !spotVideoFile && (
+              <p className="text-xs text-muted-foreground px-1">Current video uploaded</p>
+            )}
+          </div>
           <input
             type="url"
             placeholder="More link URL (optional)"
@@ -200,7 +235,11 @@ const Admin = () => {
             className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
           />
           <button type="submit" disabled={spotSaving} className="px-5 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-bold hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center gap-1">
-            <Plus size={14} /> {spotSaving ? "Adding..." : "Add Spotlight"}
+            {editingSpotlight ? (
+              <><Save size={14} /> {spotSaving ? "Saving..." : "Update Spotlight"}</>
+            ) : (
+              <><Plus size={14} /> {spotSaving ? "Adding..." : "Add Spotlight"}</>
+            )}
           </button>
         </form>
 
@@ -213,7 +252,7 @@ const Admin = () => {
         ) : (
           <div className="space-y-3 mb-8">
             {spotlights.map((s) => (
-              <div key={s.id} className="flex items-center gap-3 bg-primary/10 rounded-xl p-3 border border-primary/20">
+              <div key={s.id} className={`flex items-center gap-3 bg-primary/10 rounded-xl p-3 border ${editingSpotlight?.id === s.id ? 'border-primary' : 'border-primary/20'}`}>
                 <div className="w-12 h-16 rounded-lg bg-black flex items-center justify-center text-white text-xs">
                   {s.video_url ? "📹" : "—"}
                 </div>
@@ -221,6 +260,9 @@ const Admin = () => {
                   <p className="font-bold text-sm truncate">{s.title}</p>
                   {s.description && <p className="text-xs text-muted-foreground truncate">{s.description}</p>}
                 </div>
+                <button onClick={() => startEditSpotlight(s)} className="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors">
+                  <Pencil size={16} />
+                </button>
                 <button onClick={() => deleteSpotlight(s.id)} className="p-2 text-destructive hover:bg-destructive/10 rounded-lg transition-colors">
                   <Trash2 size={16} />
                 </button>
