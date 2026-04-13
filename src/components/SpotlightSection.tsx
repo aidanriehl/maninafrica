@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import ComicSectionHeader from "./ComicSectionHeader";
 
 interface Spotlight {
   id: string;
@@ -61,15 +62,10 @@ const SpotlightSection = () => {
 
   return (
     <section className="py-6 md:py-8">
-      {/* Title section - full width */}
-      <div className="bg-[#d3ffd9] py-6 mb-6 text-center">
-        <h2 className="font-serif text-2xl md:text-3xl font-bold mb-2">
-          Campaign In The Spotlight 👇
-        </h2>
-        <p className="text-foreground/70 text-base md:text-lg">
-          all current donations are going towards supporting this individual/issue
-        </p>
-      </div>
+      <ComicSectionHeader
+        title="Campaign In The Spotlight 👇"
+        subtitle="all current donations are going towards supporting this individual/issue"
+      />
 
       {/* Spotlight cards */}
       <div className="container max-w-md">
