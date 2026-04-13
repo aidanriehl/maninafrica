@@ -65,6 +65,7 @@ const SpotlightSection = () => {
       <ComicSectionHeader
         title="Campaign In The Spotlight 👇"
         subtitle="all current donations are going here"
+        compact
       />
 
       {/* Spotlight cards */}
