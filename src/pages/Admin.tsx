@@ -31,7 +31,6 @@ const Admin = () => {
   const [spotlights, setSpotlights] = useState<Spotlight[]>([]);
   const [spotTitle, setSpotTitle] = useState("");
   const [spotVideoFile, setSpotVideoFile] = useState<File | null>(null);
-  const [spotMoreLink, setSpotMoreLink] = useState("");
   const [spotDescription, setSpotDescription] = useState("");
   const [spotSaving, setSpotSaving] = useState(false);
   const [editingSpotlight, setEditingSpotlight] = useState<Spotlight | null>(null);
@@ -97,7 +96,6 @@ const Admin = () => {
     const payload = {
       title: spotTitle,
       video_url: videoUrl,
-      more_link: spotMoreLink || null,
       description: spotDescription || null,
     };
 
@@ -116,7 +114,6 @@ const Admin = () => {
     setEditingSpotlight(s);
     setSpotTitle(s.title);
     setSpotDescription(s.description || "");
-    setSpotMoreLink(s.more_link || "");
     setSpotVideoFile(null);
   };
 
@@ -124,7 +121,6 @@ const Admin = () => {
     setEditingSpotlight(null);
     setSpotTitle("");
     setSpotVideoFile(null);
-    setSpotMoreLink("");
     setSpotDescription("");
   };
 
@@ -227,13 +223,6 @@ const Admin = () => {
               <p className="text-xs text-muted-foreground px-1">Current video uploaded</p>
             )}
           </div>
-          <input
-            type="url"
-            placeholder="More link URL (optional)"
-            value={spotMoreLink}
-            onChange={(e) => setSpotMoreLink(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
-          />
           <button type="submit" disabled={spotSaving} className="px-5 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-bold hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center gap-1">
             {editingSpotlight ? (
               <><Save size={14} /> {spotSaving ? "Saving..." : "Update Spotlight"}</>
