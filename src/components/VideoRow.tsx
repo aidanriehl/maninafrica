@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef, useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import ComicSectionHeader from "./ComicSectionHeader";
 
 interface Campaign {
   id: string;
