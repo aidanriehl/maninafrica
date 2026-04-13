@@ -52,10 +52,10 @@ const ComicSectionHeader = ({ title, subtitle }: ComicSectionHeaderProps) => {
 
         {/* Text overlay */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-10">
-          <h2 className="font-serif text-xl md:text-3xl font-bold mb-1 leading-tight">
+          <h2 className="font-serif text-2xl md:text-3xl font-bold mb-1 leading-tight">
             {title}
           </h2>
-          <p className="text-foreground/70 text-xs md:text-base leading-tight">
+          <p className="text-foreground/70 text-sm md:text-base leading-tight">
             {subtitle}
           </p>
         </div>
