@@ -10,7 +10,7 @@ const HowItWorksSection = () => {
               How This Works
             </h2>
             <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
-              $10/month supports our work across slavery, child poverty, water, etc. However, if you only want to donate to a specific cause, <Link to="/campaigns" className="text-primary font-bold hover:underline">you can do that too</Link>.
+              $10/month supports our work across slavery, child poverty, water, etc. However, if you only want to donate to a specific cause, <Link to="/campaigns" className="text-primary font-bold underline">you can do that too</Link>.
             </p>
           </div>
         </div>
