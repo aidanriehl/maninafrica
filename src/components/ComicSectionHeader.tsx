@@ -44,7 +44,7 @@ const ComicSectionHeader = ({ title, subtitle }: ComicSectionHeaderProps) => {
             strokeWidth="2.5"
           />
           <rect
-            x="0" y="0" width="520" height="140"
+            x="0" y="0" width="520" height="180"
             fill={`url(#${dotsId})`}
             clipPath={`url(#${clipId})`}
           />
