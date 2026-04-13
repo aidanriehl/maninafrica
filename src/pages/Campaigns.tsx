@@ -50,9 +50,38 @@ const CampaignCard = ({ campaign }: { campaign: Campaign }) => (
   </div>
 );
 
+const SpotlightCard = ({ spotlight }: { spotlight: Spotlight }) => (
+  <div className="bg-white rounded-xl border-2 border-foreground shadow-[3px_4px_0px_0px_hsl(var(--foreground))] overflow-hidden">
+    {spotlight.video_url && (
+      <div className="aspect-square bg-black">
+        <video
+          src={spotlight.video_url}
+          className="w-full h-full object-cover"
+          controls
+          playsInline
+        />
+      </div>
+    )}
+    <div className="p-2">
+      <h3 className="font-serif text-xs sm:text-sm font-bold leading-tight mb-1">{spotlight.title}</h3>
+      {spotlight.description && (
+        <span className="inline-block px-2 py-0.5 bg-[#d3ffd9] border border-foreground rounded-full text-[10px] mb-2">
+          {spotlight.description}
+        </span>
+      )}
+      <a
+        href="#donate"
+        className="block w-full py-1.5 bg-[#efc738] text-foreground rounded-lg font-bold text-center text-[10px] sm:text-xs hover:bg-[#ddb52e] transition-colors border border-foreground"
+      >
+        DONATE
+      </a>
+    </div>
+  </div>
+);
+
 const Campaigns = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>(fallbackVideos);
-  const [currentCampaign, setCurrentCampaign] = useState<Spotlight | null>(null);
+  const [spotlights, setSpotlights] = useState<Spotlight[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,9 +89,9 @@ const Campaigns = () => {
       const { data: campaignsData } = await supabase.from("campaigns").select("*").order("created_at", { ascending: false });
       if (campaignsData && campaignsData.length > 0) setCampaigns(campaignsData);
 
-      // Fetch current spotlight campaign
-      const { data: spotlightData } = await supabase.from("spotlight").select("*").order("created_at", { ascending: false }).limit(1);
-      if (spotlightData && spotlightData.length > 0) setCurrentCampaign(spotlightData[0]);
+      // Fetch all spotlight campaigns
+      const { data: spotlightData } = await supabase.from("spotlight").select("*").order("created_at", { ascending: false });
+      if (spotlightData) setSpotlights(spotlightData);
     };
     fetchData();
   }, []);
@@ -76,35 +105,14 @@ const Campaigns = () => {
             <ArrowLeft size={16} /> Back
           </Link>
 
-          {/* Spotlight Campaign Section */}
-          {currentCampaign && (
+          {/* Spotlight Campaigns Section */}
+          {spotlights.length > 0 && (
             <section className="mb-8">
-              <h2 className="font-serif text-xl md:text-2xl font-bold mb-4">Spotlight Campaign</h2>
-              <div className="bg-white rounded-xl border-2 border-foreground shadow-[3px_4px_0px_0px_hsl(var(--foreground))] overflow-hidden w-72">
-                {currentCampaign.video_url && (
-                  <div className="aspect-square bg-black">
-                    <video
-                      src={currentCampaign.video_url}
-                      className="w-full h-full object-cover"
-                      controls
-                      playsInline
-                    />
-                  </div>
-                )}
-                <div className="p-4">
-                  <h3 className="font-serif text-base font-bold leading-tight mb-2">{currentCampaign.title}</h3>
-                  {currentCampaign.description && (
-                    <span className="inline-block px-3 py-1 bg-[#d3ffd9] border border-foreground rounded-full text-xs mb-3">
-                      {currentCampaign.description}
-                    </span>
-                  )}
-                  <a
-                    href="#donate"
-                    className="block w-full py-2.5 bg-[#efc738] text-foreground rounded-lg font-bold text-center text-sm hover:bg-[#ddb52e] transition-colors border border-foreground"
-                  >
-                    DONATE
-                  </a>
-                </div>
+              <h2 className="font-serif text-xl md:text-2xl font-bold mb-4">Spotlight Campaigns</h2>
+              <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                {spotlights.map((spotlight) => (
+                  <SpotlightCard key={spotlight.id} spotlight={spotlight} />
+                ))}
               </div>
             </section>
           )}
