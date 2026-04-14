@@ -74,12 +74,12 @@ const SpotlightSection = () => {
       <div className="mx-auto w-full md:max-w-[66%] px-4">
         {isSingle ? (
           <div className="flex justify-center">
-            <div className="w-64">
+            <div className="w-64 md:w-80">
               <SpotlightCard spotlight={spotlights[0]} />
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
+          <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-md md:max-w-xl mx-auto">
             {spotlights.map((spotlight) => (
               <SpotlightCard key={spotlight.id} spotlight={spotlight} />
             ))}

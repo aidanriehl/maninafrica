@@ -19,7 +19,7 @@ const fallbackVideos: Campaign[] = [
 ];
 
 const CampaignCard = ({ campaign }: { campaign: Campaign }) => (
-  <div className="flex-shrink-0 w-44 bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden">
+  <div className="flex-shrink-0 w-44 md:w-56 bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden">
     {/* Video/thumbnail area */}
     <div className="aspect-[9/12] bg-black relative">
       {campaign.video_url && campaign.video_url !== "#" ? (
