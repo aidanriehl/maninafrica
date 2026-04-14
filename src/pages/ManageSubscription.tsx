@@ -28,7 +28,7 @@ const ManageSubscription = () => {
                 <div>
                   <h3 className="font-bold mb-1">Step 1: Check Your Email</h3>
                   <p className="text-sm text-muted-foreground">
-                    Search your inbox for emails from <span className="font-medium text-foreground">Givebutter</span>. Look for the confirmation email you received when you first donated.
+                    Look for the confirmation email you received when you first donated from <span className="font-medium text-foreground">Givebutter</span>.
                   </p>
                 </div>
               </div>
