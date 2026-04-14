@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import ComicSectionHeader from "./ComicSectionHeader";
 
@@ -11,7 +12,7 @@ interface Spotlight {
 }
 
 const SpotlightCard = ({ spotlight }: { spotlight: Spotlight }) => (
-  <div className="flex-shrink-0 w-64 bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden snap-center">
+  <div className="w-64 bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden">
     {/* Video/thumbnail area */}
     {spotlight.video_url && (
       <div className="aspect-[9/16] bg-black relative">
@@ -46,6 +47,7 @@ const SpotlightCard = ({ spotlight }: { spotlight: Spotlight }) => (
 
 const SpotlightSection = () => {
   const [spotlights, setSpotlights] = useState<Spotlight[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,6 +64,14 @@ const SpotlightSection = () => {
 
   const isSingle = spotlights.length === 1;
 
+  const goNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % spotlights.length);
+  };
+
+  const goPrev = () => {
+    setCurrentIndex((prev) => (prev - 1 + spotlights.length) % spotlights.length);
+  };
+
   return (
     <section className="pt-2 pb-6 md:pt-4 md:pb-8">
       <ComicSectionHeader
@@ -70,12 +80,42 @@ const SpotlightSection = () => {
         compact
       />
 
-      {/* Spotlight cards */}
+      {/* Spotlight carousel */}
       <div className="mx-auto w-full md:max-w-[66%] px-4">
-        <div className={`flex gap-4 pb-4 ${isSingle ? 'justify-center' : 'justify-center flex-wrap'}`}>
-          {spotlights.map((spotlight) => (
-            <SpotlightCard key={spotlight.id} spotlight={spotlight} />
-          ))}
+        {/* Counter */}
+        {!isSingle && (
+          <div className="text-center mb-3">
+            <span className="text-sm font-bold text-foreground/70">
+              {currentIndex + 1}/{spotlights.length}
+            </span>
+          </div>
+        )}
+
+        <div className="flex items-center justify-center gap-4">
+          {/* Left arrow */}
+          {!isSingle && (
+            <button
+              onClick={goPrev}
+              className="w-9 h-9 bg-background/80 backdrop-blur rounded-full flex items-center justify-center shadow-md border border-border hover:bg-background transition-colors"
+              aria-label="Previous spotlight"
+            >
+              <ChevronLeft size={18} />
+            </button>
+          )}
+
+          {/* Current card */}
+          <SpotlightCard spotlight={spotlights[currentIndex]} />
+
+          {/* Right arrow */}
+          {!isSingle && (
+            <button
+              onClick={goNext}
+              className="w-9 h-9 bg-background/80 backdrop-blur rounded-full flex items-center justify-center shadow-md border border-border hover:bg-background transition-colors"
+              aria-label="Next spotlight"
+            >
+              <ChevronRight size={18} />
+            </button>
+          )}
         </div>
       </div>
     </section>
