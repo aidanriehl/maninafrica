@@ -53,7 +53,7 @@ const HeroSection = () => {
             to="/campaigns"
             className="px-8 py-3 bg-transparent text-primary border-2 border-primary rounded-full font-bold text-base hover:bg-primary/10 transition-colors"
           >
-            Donate to a Specific Campaign
+            Donate to a Specific Campaign Instead
           </Link>
         </div>
       </div>
