@@ -40,7 +40,7 @@ const ManageSubscription = () => {
                 <div>
                   <h3 className="font-bold mb-1">Step 2: Manage Your Donation</h3>
                   <p className="text-sm text-muted-foreground">
-                    From there, you can pause, cancel, or change the amount you give each month.
+                    From there, you can pause, cancel, or change the amount you donate each month.
                   </p>
                 </div>
               </div>
