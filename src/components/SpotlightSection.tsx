@@ -14,7 +14,7 @@ const SpotlightCard = ({ spotlight }: { spotlight: Spotlight }) => (
   <div className="flex-shrink-0 w-64 bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden snap-center">
     {/* Video/thumbnail area */}
     {spotlight.video_url && (
-      <div className="aspect-[9/12] bg-black relative">
+      <div className="aspect-[9/16] bg-black relative">
         <video
           src={spotlight.video_url}
           className="w-full h-full object-cover"
