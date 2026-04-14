@@ -25,7 +25,7 @@ const ComicSectionHeader = ({ title, subtitle, compact = false }: ComicSectionHe
         {/* Shadow layer */}
         <svg
           viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
-          className="absolute top-[5px] left-[5px] w-[92vw] max-w-[580px] h-auto"
+          className="absolute top-[5px] left-[5px] w-[92vw] max-w-[500px] h-auto"
           preserveAspectRatio="none"
         >
           <path d={shapePath} fill="hsl(var(--foreground))" />
@@ -34,7 +34,7 @@ const ComicSectionHeader = ({ title, subtitle, compact = false }: ComicSectionHe
         {/* Main green shape */}
         <svg
           viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
-          className="relative w-[92vw] max-w-[580px] h-auto"
+          className="relative w-[92vw] max-w-[500px] h-auto"
           preserveAspectRatio="none"
         >
           <defs>
@@ -60,10 +60,10 @@ const ComicSectionHeader = ({ title, subtitle, compact = false }: ComicSectionHe
 
         {/* Text overlay */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-10">
-          <h2 className="font-serif text-xl md:text-2xl font-bold mb-2 leading-tight whitespace-nowrap">
+          <h2 className="font-serif text-xl md:text-3xl font-bold mb-2 leading-tight whitespace-nowrap">
             {title}
           </h2>
-          <p className="text-foreground/70 text-sm md:text-base leading-tight">
+          <p className="text-foreground/70 text-sm md:text-lg leading-tight">
             {subtitle}
           </p>
         </div>
