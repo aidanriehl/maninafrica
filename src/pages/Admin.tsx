@@ -335,9 +335,9 @@ const Admin = () => {
         </div>
 
         {/* Add Spotlight form */}
-        <form onSubmit={addSpotlight} className="bg-primary/10 rounded-xl p-5 mb-8 space-y-3 border border-primary/20">
-          <h2 className="font-bold text-sm mb-2 flex items-center gap-2">
-            <Star size={16} className="text-primary" /> Add Spotlight Campaign
+        <form onSubmit={addSpotlight} className="bg-[#efc738]/20 rounded-xl p-5 mb-8 space-y-3 border border-[#efc738]/40">
+          <h2 className="font-bold text-sm mb-2 flex items-center gap-2 text-amber-700">
+            <Star size={16} className="text-amber-600" /> Add Spotlight Campaign
           </h2>
           <input
             type="text"
@@ -371,14 +371,14 @@ const Admin = () => {
               className="hidden"
             />
           </label>
-          <button type="submit" disabled={spotSaving} className="px-5 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-bold hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center gap-1">
+          <button type="submit" disabled={spotSaving} className="px-5 py-2.5 bg-[#efc738] text-foreground rounded-lg text-sm font-bold hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center gap-1">
             <Plus size={14} /> {spotSaving ? "Adding..." : "Add Spotlight"}
           </button>
         </form>
 
         {/* Spotlight list */}
-        <h2 className="font-bold text-sm mb-3 flex items-center gap-2">
-          <Star size={14} className="text-primary" /> Spotlight Campaigns ({spotlights.length})
+        <h2 className="font-bold text-sm mb-3 flex items-center gap-2 text-amber-700">
+          <Star size={14} className="text-amber-600" /> Spotlight Campaigns ({spotlights.length})
         </h2>
         {spotlights.length === 0 ? (
           <p className="text-muted-foreground text-sm text-center mb-8">No spotlight campaigns yet. Add your first one above.</p>
@@ -391,7 +391,7 @@ const Admin = () => {
                   onDragStart={() => handleDragStart(s.id)}
                   onDragOver={handleDragOver}
                   onDrop={() => handleDrop(s.id)}
-                  className={`flex items-center gap-3 bg-primary/10 rounded-xl p-3 border ${editingSpotlightId === s.id ? 'border-primary rounded-b-none' : 'border-primary/20'} ${draggedSpotlight === s.id ? 'opacity-50' : ''}`}
+                  className={`flex items-center gap-3 bg-[#efc738]/20 rounded-xl p-3 border ${editingSpotlightId === s.id ? 'border-[#efc738] rounded-b-none' : 'border-[#efc738]/40'} ${draggedSpotlight === s.id ? 'opacity-50' : ''}`}
                 >
                   <div className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground">
                     <GripVertical size={18} />
@@ -403,7 +403,7 @@ const Admin = () => {
                     <p className="font-bold text-sm truncate">{s.title}</p>
                     {s.description && <p className="text-xs text-muted-foreground truncate">{s.description}</p>}
                   </div>
-                  <button onClick={() => editingSpotlightId === s.id ? cancelEdit() : startEditSpotlight(s)} className="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors" title="Edit">
+                  <button onClick={() => editingSpotlightId === s.id ? cancelEdit() : startEditSpotlight(s)} className="p-2 text-amber-600 hover:bg-amber-100 rounded-lg transition-colors" title="Edit">
                     {editingSpotlightId === s.id ? <X size={16} /> : <Pencil size={16} />}
                   </button>
                   <button onClick={() => graduateSpotlight(s)} className="p-2 text-amber-600 hover:bg-amber-100 rounded-lg transition-colors" title="Graduate to Past Campaign">
@@ -416,7 +416,7 @@ const Admin = () => {
 
                 {/* Inline edit form */}
                 {editingSpotlightId === s.id && (
-                  <form onSubmit={(e) => saveEditSpotlight(e, s)} className="bg-primary/5 rounded-b-xl p-4 space-y-3 border border-t-0 border-primary">
+                  <form onSubmit={(e) => saveEditSpotlight(e, s)} className="bg-[#efc738]/10 rounded-b-xl p-4 space-y-3 border border-t-0 border-[#efc738]">
                     <input
                       type="text"
                       placeholder="Campaign title"
@@ -455,7 +455,7 @@ const Admin = () => {
                       )}
                     </div>
                     <div className="flex gap-2">
-                      <button type="submit" disabled={editSaving} className="px-5 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-bold hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center gap-1">
+                      <button type="submit" disabled={editSaving} className="px-5 py-2.5 bg-[#efc738] text-foreground rounded-lg text-sm font-bold hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center gap-1">
                         <Save size={14} /> {editSaving ? "Saving..." : "Save Changes"}
                       </button>
                       <button type="button" onClick={cancelEdit} className="px-5 py-2.5 bg-secondary text-foreground rounded-lg text-sm font-bold hover:opacity-90 transition-opacity">
@@ -470,8 +470,8 @@ const Admin = () => {
         )}
 
         {/* Add campaign form */}
-        <form onSubmit={addCampaign} className="bg-amber-100/50 rounded-xl p-5 mb-8 space-y-3 border border-amber-200">
-          <h2 className="font-bold text-sm mb-2 flex items-center gap-1 text-amber-700"><Plus size={16} /> Add Past Campaign</h2>
+        <form onSubmit={addCampaign} className="bg-primary/10 rounded-xl p-5 mb-8 space-y-3 border border-primary/20">
+          <h2 className="font-bold text-sm mb-2 flex items-center gap-1"><Plus size={16} /> Add Past Campaign</h2>
           <input
             type="text"
             placeholder="Campaign title"
@@ -501,13 +501,13 @@ const Admin = () => {
               className="hidden"
             />
           </label>
-          <button type="submit" disabled={uploading} className="px-5 py-2.5 bg-amber-500 text-white rounded-lg text-sm font-bold hover:opacity-90 transition-opacity disabled:opacity-50">
+          <button type="submit" disabled={uploading} className="px-5 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-bold hover:opacity-90 transition-opacity disabled:opacity-50">
             {uploading ? "Uploading..." : "Add Campaign"}
           </button>
         </form>
 
         {/* Campaign list */}
-        <h2 className="font-bold text-sm mb-3 text-amber-700">Past Campaigns ({campaigns.length})</h2>
+        <h2 className="font-bold text-sm mb-3">Past Campaigns ({campaigns.length})</h2>
         {loading ? (
           <p className="text-muted-foreground text-sm">Loading...</p>
         ) : campaigns.length === 0 ? (
@@ -516,13 +516,13 @@ const Admin = () => {
           <div className="space-y-3 mb-8">
             {campaigns.map((c) => (
               <div key={c.id}>
-                <div className={`flex items-center gap-3 bg-amber-100/50 rounded-xl p-3 border ${editingCampaignId === c.id ? 'border-amber-500 rounded-b-none' : 'border-amber-200'}`}>
+                <div className={`flex items-center gap-3 bg-primary/10 rounded-xl p-3 border ${editingCampaignId === c.id ? 'border-primary rounded-b-none' : 'border-primary/20'}`}>
                   <img src={c.thumbnail_url} alt={c.title} className="w-12 h-16 rounded-lg object-cover" />
                   <div className="flex-1 min-w-0">
                     <p className="font-bold text-sm truncate">{c.title}</p>
                     {c.video_url && <p className="text-xs text-muted-foreground">Video uploaded</p>}
                   </div>
-                  <button onClick={() => editingCampaignId === c.id ? cancelEditCampaign() : startEditCampaign(c)} className="p-2 text-amber-600 hover:bg-amber-100 rounded-lg transition-colors" title="Edit">
+                  <button onClick={() => editingCampaignId === c.id ? cancelEditCampaign() : startEditCampaign(c)} className="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors" title="Edit">
                     {editingCampaignId === c.id ? <X size={16} /> : <Pencil size={16} />}
                   </button>
                   <button onClick={() => deleteCampaign(c.id)} className="p-2 text-destructive hover:bg-destructive/10 rounded-lg transition-colors" title="Delete">
@@ -532,7 +532,7 @@ const Admin = () => {
 
                 {/* Inline edit form */}
                 {editingCampaignId === c.id && (
-                  <form onSubmit={(e) => saveEditCampaign(e, c)} className="bg-amber-50 rounded-b-xl p-4 space-y-3 border border-t-0 border-amber-500">
+                  <form onSubmit={(e) => saveEditCampaign(e, c)} className="bg-primary/5 rounded-b-xl p-4 space-y-3 border border-t-0 border-primary">
                     <input
                       type="text"
                       placeholder="Campaign title"
@@ -572,7 +572,7 @@ const Admin = () => {
                       )}
                     </div>
                     <div className="flex gap-2">
-                      <button type="submit" disabled={editCampaignSaving} className="px-5 py-2.5 bg-amber-500 text-white rounded-lg text-sm font-bold hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center gap-1">
+                      <button type="submit" disabled={editCampaignSaving} className="px-5 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-bold hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center gap-1">
                         <Save size={14} /> {editCampaignSaving ? "Saving..." : "Save Changes"}
                       </button>
                       <button type="button" onClick={cancelEditCampaign} className="px-5 py-2.5 bg-secondary text-foreground rounded-lg text-sm font-bold hover:opacity-90 transition-opacity">
