@@ -36,13 +36,20 @@ const Admin = () => {
   const [spotSaving, setSpotSaving] = useState(false);
   const [draggedSpotlight, setDraggedSpotlight] = useState<string | null>(null);
 
-  // Inline edit state
+  // Inline edit state for spotlight
   const [editingSpotlightId, setEditingSpotlightId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [editDescription, setEditDescription] = useState("");
   const [editDonateLink, setEditDonateLink] = useState("");
   const [editVideoFile, setEditVideoFile] = useState<File | null>(null);
   const [editSaving, setEditSaving] = useState(false);
+
+  // Inline edit state for campaigns
+  const [editingCampaignId, setEditingCampaignId] = useState<string | null>(null);
+  const [editCampaignTitle, setEditCampaignTitle] = useState("");
+  const [editCampaignThumbnailFile, setEditCampaignThumbnailFile] = useState<File | null>(null);
+  const [editCampaignVideoFile, setEditCampaignVideoFile] = useState<File | null>(null);
+  const [editCampaignSaving, setEditCampaignSaving] = useState(false);
 
   // Site settings
   const [fundUrl, setFundUrl] = useState("");
@@ -263,6 +270,52 @@ const Admin = () => {
 
   const deleteCampaign = async (id: string) => {
     await supabase.from("campaigns").delete().eq("id", id);
+    if (editingCampaignId === id) {
+      cancelEditCampaign();
+    }
+    fetchCampaigns();
+  };
+
+  const startEditCampaign = (c: Campaign) => {
+    setEditingCampaignId(c.id);
+    setEditCampaignTitle(c.title);
+    setEditCampaignThumbnailFile(null);
+    setEditCampaignVideoFile(null);
+  };
+
+  const cancelEditCampaign = () => {
+    setEditingCampaignId(null);
+    setEditCampaignTitle("");
+    setEditCampaignThumbnailFile(null);
+    setEditCampaignVideoFile(null);
+  };
+
+  const saveEditCampaign = async (e: React.FormEvent, campaign: Campaign) => {
+    e.preventDefault();
+    if (!editCampaignTitle) return;
+    setEditCampaignSaving(true);
+
+    let thumbnailUrl = campaign.thumbnail_url;
+    let videoUrl = campaign.video_url;
+
+    if (editCampaignThumbnailFile) {
+      const uploadedUrl = await uploadFile(editCampaignThumbnailFile, "images", "thumbnails");
+      if (uploadedUrl) thumbnailUrl = uploadedUrl;
+    }
+
+    if (editCampaignVideoFile) {
+      const uploadedUrl = await uploadFile(editCampaignVideoFile, "videos", "campaigns");
+      if (uploadedUrl) videoUrl = uploadedUrl;
+    }
+
+    await supabase.from("campaigns").update({
+      title: editCampaignTitle,
+      thumbnail_url: thumbnailUrl,
+      video_url: videoUrl,
+    }).eq("id", campaign.id);
+
+    cancelEditCampaign();
+    setEditCampaignSaving(false);
     fetchCampaigns();
   };
 
@@ -279,32 +332,6 @@ const Admin = () => {
           <button onClick={handleLogout} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
             <LogOut size={16} /> Logout
           </button>
-        </div>
-
-        {/* Site Settings */}
-        <div className="bg-secondary/40 rounded-xl p-5 mb-8 space-y-3">
-          <h2 className="font-bold text-sm mb-2 flex items-center gap-2">
-            <Settings size={16} /> Site Settings
-          </h2>
-          <div className="space-y-2">
-            <label className="text-xs text-muted-foreground">"Donate to Our Fund" Button URL</label>
-            <div className="flex gap-2">
-              <input
-                type="url"
-                placeholder="https://gofundme.com/..."
-                value={fundUrl}
-                onChange={(e) => setFundUrl(e.target.value)}
-                className="flex-1 px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
-              />
-              <button
-                type="button"
-                onClick={saveFundUrl}
-                className="px-4 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-bold hover:opacity-90 transition-opacity"
-              >
-                Save
-              </button>
-            </div>
-          </div>
         </div>
 
         {/* Add Spotlight form */}
@@ -443,8 +470,8 @@ const Admin = () => {
         )}
 
         {/* Add campaign form */}
-        <form onSubmit={addCampaign} className="bg-secondary/40 rounded-xl p-5 mb-8 space-y-3">
-          <h2 className="font-bold text-sm mb-2 flex items-center gap-1"><Plus size={16} /> Add Past Campaign</h2>
+        <form onSubmit={addCampaign} className="bg-amber-100/50 rounded-xl p-5 mb-8 space-y-3 border border-amber-200">
+          <h2 className="font-bold text-sm mb-2 flex items-center gap-1 text-amber-700"><Plus size={16} /> Add Past Campaign</h2>
           <input
             type="text"
             placeholder="Campaign title"
@@ -474,33 +501,116 @@ const Admin = () => {
               className="hidden"
             />
           </label>
-          <button type="submit" disabled={uploading} className="px-5 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-bold hover:opacity-90 transition-opacity disabled:opacity-50">
+          <button type="submit" disabled={uploading} className="px-5 py-2.5 bg-amber-500 text-white rounded-lg text-sm font-bold hover:opacity-90 transition-opacity disabled:opacity-50">
             {uploading ? "Uploading..." : "Add Campaign"}
           </button>
         </form>
 
         {/* Campaign list */}
-        <h2 className="font-bold text-sm mb-3">Past Campaigns ({campaigns.length})</h2>
+        <h2 className="font-bold text-sm mb-3 text-amber-700">Past Campaigns ({campaigns.length})</h2>
         {loading ? (
           <p className="text-muted-foreground text-sm">Loading...</p>
         ) : campaigns.length === 0 ? (
-          <p className="text-muted-foreground text-sm text-center">No campaigns yet. Add your first one above.</p>
+          <p className="text-muted-foreground text-sm text-center mb-8">No campaigns yet. Add your first one above.</p>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-3 mb-8">
             {campaigns.map((c) => (
-              <div key={c.id} className="flex items-center gap-3 bg-secondary/40 rounded-xl p-3">
-                <img src={c.thumbnail_url} alt={c.title} className="w-12 h-16 rounded-lg object-cover" />
-                <div className="flex-1 min-w-0">
-                  <p className="font-bold text-sm truncate">{c.title}</p>
-                  {c.video_url && <p className="text-xs text-muted-foreground">Video uploaded</p>}
+              <div key={c.id}>
+                <div className={`flex items-center gap-3 bg-amber-100/50 rounded-xl p-3 border ${editingCampaignId === c.id ? 'border-amber-500 rounded-b-none' : 'border-amber-200'}`}>
+                  <img src={c.thumbnail_url} alt={c.title} className="w-12 h-16 rounded-lg object-cover" />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-sm truncate">{c.title}</p>
+                    {c.video_url && <p className="text-xs text-muted-foreground">Video uploaded</p>}
+                  </div>
+                  <button onClick={() => editingCampaignId === c.id ? cancelEditCampaign() : startEditCampaign(c)} className="p-2 text-amber-600 hover:bg-amber-100 rounded-lg transition-colors" title="Edit">
+                    {editingCampaignId === c.id ? <X size={16} /> : <Pencil size={16} />}
+                  </button>
+                  <button onClick={() => deleteCampaign(c.id)} className="p-2 text-destructive hover:bg-destructive/10 rounded-lg transition-colors" title="Delete">
+                    <Trash2 size={16} />
+                  </button>
                 </div>
-                <button onClick={() => deleteCampaign(c.id)} className="p-2 text-destructive hover:bg-destructive/10 rounded-lg transition-colors">
-                  <Trash2 size={16} />
-                </button>
+
+                {/* Inline edit form */}
+                {editingCampaignId === c.id && (
+                  <form onSubmit={(e) => saveEditCampaign(e, c)} className="bg-amber-50 rounded-b-xl p-4 space-y-3 border border-t-0 border-amber-500">
+                    <input
+                      type="text"
+                      placeholder="Campaign title"
+                      value={editCampaignTitle}
+                      onChange={(e) => setEditCampaignTitle(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
+                      required
+                    />
+                    <div className="space-y-1">
+                      <label className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-border bg-background text-sm cursor-pointer hover:bg-secondary/20">
+                        <Upload size={16} />
+                        <span>{editCampaignThumbnailFile ? editCampaignThumbnailFile.name : "Upload new thumbnail"}</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => setEditCampaignThumbnailFile(e.target.files?.[0] || null)}
+                          className="hidden"
+                        />
+                      </label>
+                      {!editCampaignThumbnailFile && (
+                        <p className="text-xs text-muted-foreground px-1">Current thumbnail uploaded</p>
+                      )}
+                    </div>
+                    <div className="space-y-1">
+                      <label className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-border bg-background text-sm cursor-pointer hover:bg-secondary/20">
+                        <Upload size={16} />
+                        <span>{editCampaignVideoFile ? editCampaignVideoFile.name : "Upload new video"}</span>
+                        <input
+                          type="file"
+                          accept="video/*"
+                          onChange={(e) => setEditCampaignVideoFile(e.target.files?.[0] || null)}
+                          className="hidden"
+                        />
+                      </label>
+                      {c.video_url && !editCampaignVideoFile && (
+                        <p className="text-xs text-muted-foreground px-1">Current video uploaded</p>
+                      )}
+                    </div>
+                    <div className="flex gap-2">
+                      <button type="submit" disabled={editCampaignSaving} className="px-5 py-2.5 bg-amber-500 text-white rounded-lg text-sm font-bold hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center gap-1">
+                        <Save size={14} /> {editCampaignSaving ? "Saving..." : "Save Changes"}
+                      </button>
+                      <button type="button" onClick={cancelEditCampaign} className="px-5 py-2.5 bg-secondary text-foreground rounded-lg text-sm font-bold hover:opacity-90 transition-opacity">
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                )}
               </div>
             ))}
           </div>
         )}
+
+        {/* Site Settings */}
+        <div className="bg-secondary/40 rounded-xl p-5 space-y-3">
+          <h2 className="font-bold text-sm mb-2 flex items-center gap-2">
+            <Settings size={16} /> Site Settings
+          </h2>
+          <div className="space-y-2">
+            <label className="text-xs text-muted-foreground">"Donate to Our Fund" Button URL</label>
+            <div className="flex gap-2">
+              <input
+                type="url"
+                placeholder="https://gofundme.com/..."
+                value={fundUrl}
+                onChange={(e) => setFundUrl(e.target.value)}
+                className="flex-1 px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
+              />
+              <button
+                type="button"
+                onClick={saveFundUrl}
+                className="px-4 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-bold hover:opacity-90 transition-opacity"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
