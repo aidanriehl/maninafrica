@@ -1,7 +1,15 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import creatorImg from "@/assets/creator-portrait.jpg";
 
 const HeroSection = () => {
+  const [fundUrl, setFundUrl] = useState("");
+
+  useEffect(() => {
+    const savedUrl = localStorage.getItem("fundDonateUrl");
+    if (savedUrl) setFundUrl(savedUrl);
+  }, []);
+
   return (
     <section className="py-8 md:py-12">
       <div className="container flex flex-col items-center text-center">
@@ -34,7 +42,9 @@ const HeroSection = () => {
         {/* Donate buttons */}
         <div className="flex flex-col sm:flex-row gap-3">
           <a
-            href="#donate"
+            href={fundUrl || "#donate"}
+            target={fundUrl ? "_blank" : undefined}
+            rel={fundUrl ? "noopener noreferrer" : undefined}
             className="px-8 py-3 bg-primary text-primary-foreground rounded-full font-bold text-base hover:opacity-90 transition-opacity"
           >
             Donate to Our Fund

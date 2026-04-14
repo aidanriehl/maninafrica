@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Trash2, Plus, LogOut, Star, Save, Upload, Pencil, X, GripVertical } from "lucide-react";
+import { Trash2, Plus, LogOut, Star, Save, Upload, Pencil, X, GripVertical, Settings } from "lucide-react";
 
 interface Campaign {
   id: string;
@@ -44,11 +44,22 @@ const Admin = () => {
   const [editVideoFile, setEditVideoFile] = useState<File | null>(null);
   const [editSaving, setEditSaving] = useState(false);
 
+  // Site settings
+  const [fundUrl, setFundUrl] = useState("");
+
   useEffect(() => {
     checkAuth();
     fetchCampaigns();
     fetchSpotlights();
+    // Load site settings from localStorage
+    const savedFundUrl = localStorage.getItem("fundDonateUrl");
+    if (savedFundUrl) setFundUrl(savedFundUrl);
   }, []);
+
+  const saveFundUrl = () => {
+    localStorage.setItem("fundDonateUrl", fundUrl);
+    alert("Fund URL saved!");
+  };
 
   const checkAuth = async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -244,6 +255,32 @@ const Admin = () => {
           <button onClick={handleLogout} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
             <LogOut size={16} /> Logout
           </button>
+        </div>
+
+        {/* Site Settings */}
+        <div className="bg-secondary/40 rounded-xl p-5 mb-8 space-y-3">
+          <h2 className="font-bold text-sm mb-2 flex items-center gap-2">
+            <Settings size={16} /> Site Settings
+          </h2>
+          <div className="space-y-2">
+            <label className="text-xs text-muted-foreground">"Donate to Our Fund" Button URL</label>
+            <div className="flex gap-2">
+              <input
+                type="url"
+                placeholder="https://gofundme.com/..."
+                value={fundUrl}
+                onChange={(e) => setFundUrl(e.target.value)}
+                className="flex-1 px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
+              />
+              <button
+                type="button"
+                onClick={saveFundUrl}
+                className="px-4 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-bold hover:opacity-90 transition-opacity"
+              >
+                Save
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Add Spotlight form */}
