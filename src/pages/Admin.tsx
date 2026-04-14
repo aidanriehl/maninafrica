@@ -23,6 +23,7 @@ const Admin = () => {
   const [title, setTitle] = useState("");
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [donateLink, setDonateLink] = useState("");
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ const Admin = () => {
   // Spotlight state - now supports multiple
   const [spotlights, setSpotlights] = useState<Spotlight[]>([]);
   const [spotTitle, setSpotTitle] = useState("");
+  const [spotThumbnailFile, setSpotThumbnailFile] = useState<File | null>(null);
   const [spotVideoFile, setSpotVideoFile] = useState<File | null>(null);
   const [spotDescription, setSpotDescription] = useState("");
   const [spotDonateLink, setSpotDonateLink] = useState("");
@@ -113,7 +115,13 @@ const Admin = () => {
     if (!spotTitle) return;
     setSpotSaving(true);
 
+    let thumbnailUrl = null;
     let videoUrl = null;
+
+    if (spotThumbnailFile) {
+      const uploadedUrl = await uploadFile(spotThumbnailFile, "images", "spotlight");
+      if (uploadedUrl) thumbnailUrl = uploadedUrl;
+    }
 
     if (spotVideoFile) {
       const uploadedUrl = await uploadFile(spotVideoFile, "videos", "spotlight");
@@ -122,12 +130,14 @@ const Admin = () => {
 
     await supabase.from("spotlight").insert({
       title: spotTitle,
+      thumbnail_url: thumbnailUrl,
       video_url: videoUrl,
       description: spotDescription || null,
       more_link: spotDonateLink || null,
     });
 
     setSpotTitle("");
+    setSpotThumbnailFile(null);
     setSpotVideoFile(null);
     setSpotDescription("");
     setSpotDonateLink("");
@@ -258,12 +268,14 @@ const Admin = () => {
     await supabase.from("campaigns").insert({
       title,
       thumbnail_url: thumbnailUrl,
-      video_url: videoUrl
+      video_url: videoUrl,
+      more_link: donateLink || null,
     });
 
     setTitle("");
     setThumbnailFile(null);
     setVideoFile(null);
+    setDonateLink("");
     setUploading(false);
     fetchCampaigns();
   };
@@ -356,14 +368,24 @@ const Admin = () => {
           />
           <input
             type="url"
-            placeholder="Donation link (GoFundMe URL)"
+            placeholder="Donation link"
             value={spotDonateLink}
             onChange={(e) => setSpotDonateLink(e.target.value)}
             className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
           />
           <label className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-border bg-background text-sm cursor-pointer hover:bg-secondary/20">
             <Upload size={16} />
-            <span>{spotVideoFile ? spotVideoFile.name : "Upload video"}</span>
+            <span>{spotThumbnailFile ? spotThumbnailFile.name : "Upload thumbnail image"}</span>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setSpotThumbnailFile(e.target.files?.[0] || null)}
+              className="hidden"
+            />
+          </label>
+          <label className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-border bg-background text-sm cursor-pointer hover:bg-secondary/20">
+            <Upload size={16} />
+            <span>{spotVideoFile ? spotVideoFile.name : "Upload video (optional)"}</span>
             <input
               type="file"
               accept="video/*"
@@ -434,7 +456,7 @@ const Admin = () => {
                     />
                     <input
                       type="url"
-                      placeholder="Donation link (GoFundMe URL)"
+                      placeholder="Donation link"
                       value={editDonateLink}
                       onChange={(e) => setEditDonateLink(e.target.value)}
                       className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
@@ -479,6 +501,13 @@ const Admin = () => {
             onChange={(e) => setTitle(e.target.value)}
             className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
             required
+          />
+          <input
+            type="url"
+            placeholder="Donation link"
+            value={donateLink}
+            onChange={(e) => setDonateLink(e.target.value)}
+            className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm"
           />
           <label className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-border bg-background text-sm cursor-pointer hover:bg-secondary/20">
             <Upload size={16} />
