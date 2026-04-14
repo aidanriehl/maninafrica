@@ -19,7 +19,7 @@ const fallbackVideos: Campaign[] = [
 ];
 
 const CampaignCard = ({ campaign }: { campaign: Campaign }) => (
-  <div className="flex-shrink-0 w-52 bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden">
+  <div className="flex-shrink-0 w-44 bg-white rounded-2xl border-2 border-foreground shadow-[4px_6px_0px_0px_hsl(var(--foreground))] overflow-hidden">
     {/* Video/thumbnail area */}
     <div className="aspect-[9/12] bg-black relative">
       {campaign.video_url && campaign.video_url !== "#" ? (
@@ -40,16 +40,16 @@ const CampaignCard = ({ campaign }: { campaign: Campaign }) => (
     </div>
 
     {/* Content area */}
-    <div className="p-4">
-      <h3 className="font-serif text-lg font-bold mb-2">{campaign.title}</h3>
+    <div className="p-3">
+      <h3 className="font-serif text-sm font-bold mb-1">{campaign.title}</h3>
       {campaign.description && (
-        <span className="inline-block px-3 py-1 bg-[#d3ffd9] border border-foreground rounded-full text-xs mb-3">
+        <span className="inline-block px-2 py-0.5 bg-[#d3ffd9] border border-foreground rounded-full text-[10px] mb-2">
           {campaign.description}
         </span>
       )}
       <a
         href="#donate"
-        className="block w-full mt-3 py-2.5 bg-[#efc738] text-foreground rounded-xl font-bold text-center text-sm hover:bg-[#ddb52e] transition-colors border-2 border-foreground"
+        className="block w-full mt-2 py-2 bg-[#efc738] text-foreground rounded-xl font-bold text-center text-xs hover:bg-[#ddb52e] transition-colors border-2 border-foreground"
       >
         DONATE
       </a>
@@ -59,8 +59,10 @@ const CampaignCard = ({ campaign }: { campaign: Campaign }) => (
 
 const VideoRow = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const [campaigns, setCampaigns] = useState<Campaign[]>(fallbackVideos);
   const [isPaused, setIsPaused] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const pauseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const autoScrollRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -74,9 +76,25 @@ const VideoRow = () => {
     fetchCampaigns();
   }, []);
 
+  // Track visibility with IntersectionObserver
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
   // Auto-scroll using JS instead of CSS animation
   const autoScroll = useCallback(() => {
-    if (!scrollRef.current || isPaused) return;
+    if (!scrollRef.current || isPaused || !isVisible) return;
 
     const container = scrollRef.current;
     const maxScroll = container.scrollWidth - container.clientWidth;
@@ -87,10 +105,10 @@ const VideoRow = () => {
     } else {
       container.scrollLeft += 1;
     }
-  }, [isPaused]);
+  }, [isPaused, isVisible]);
 
   useEffect(() => {
-    if (!isPaused) {
+    if (!isPaused && isVisible) {
       autoScrollRef.current = setInterval(autoScroll, 30);
     } else {
       if (autoScrollRef.current) {
@@ -103,14 +121,14 @@ const VideoRow = () => {
         clearInterval(autoScrollRef.current);
       }
     };
-  }, [isPaused, autoScroll]);
+  }, [isPaused, isVisible, autoScroll]);
 
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
 
     const container = scrollRef.current;
     const maxScroll = container.scrollWidth - container.clientWidth;
-    const scrollAmount = 280;
+    const scrollAmount = 200;
 
     // Clear any existing timeout
     if (pauseTimeoutRef.current) {
@@ -158,7 +176,7 @@ const VideoRow = () => {
   const doubled = [...campaigns, ...campaigns];
 
   return (
-    <section className="py-8 md:py-12 overflow-hidden">
+    <section ref={sectionRef} className="py-8 md:py-12 overflow-hidden">
       <ComicSectionHeader
         title="Past Campaigns 👇"
         subtitle="Every video is tied to a campaign."
@@ -193,7 +211,7 @@ const VideoRow = () => {
         </div>
 
         <div className="text-center mt-6">
-          <Link to="/campaigns" className="text-lg font-bold text-primary hover:underline">See All →</Link>
+          <Link to="/campaigns" className="text-base font-bold text-primary hover:underline">See All →</Link>
         </div>
       </div>
     </section>
