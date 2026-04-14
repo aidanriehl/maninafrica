@@ -17,7 +17,7 @@ const ManageSubscription = () => {
 
           <div className="bg-secondary/30 rounded-2xl p-6 mb-6 border border-border">
             <p className="text-muted-foreground mb-6">
-              Your donation is managed through <span className="font-bold text-foreground">Givebutter</span>, the platform we use to process donations and send you updates on the impact you're making.
+              Your donation is managed through <a href="https://givebutter.com/1maninafrica" target="_blank" rel="noopener noreferrer" className="font-bold text-primary hover:underline">Givebutter</a>, the platform we use to process donations and send you updates on the impact you're making.
             </p>
 
             <div className="space-y-5">
@@ -28,7 +28,7 @@ const ManageSubscription = () => {
                 <div>
                   <h3 className="font-bold mb-1">Step 1: Check Your Email</h3>
                   <p className="text-sm text-muted-foreground">
-                    Look for the confirmation email you received when you first donated from <span className="font-medium text-foreground">Givebutter</span>.
+                    Look for the confirmation email you received when you first donated on <span className="font-medium text-foreground">Givebutter</span>.
                   </p>
                 </div>
               </div>
