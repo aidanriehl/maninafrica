@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Trash2, Plus, LogOut, Star, Save, Upload, Pencil, X, GripVertical, Settings } from "lucide-react";
+import { Trash2, Plus, LogOut, Star, Save, Upload, Pencil, X, GripVertical, Settings, GraduationCap } from "lucide-react";
 
 interface Campaign {
   id: string;
@@ -174,6 +174,30 @@ const Admin = () => {
       cancelEdit();
     }
     fetchSpotlights();
+  };
+
+  const graduateSpotlight = async (spotlight: Spotlight) => {
+    // Move spotlight to past campaigns
+    // Use video thumbnail or a placeholder for thumbnail_url
+    const thumbnailUrl = spotlight.video_url
+      ? spotlight.video_url
+      : "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=300&h=500&fit=crop";
+
+    await supabase.from("campaigns").insert({
+      title: spotlight.title,
+      thumbnail_url: thumbnailUrl,
+      video_url: spotlight.video_url,
+    });
+
+    // Delete from spotlight
+    await supabase.from("spotlight").delete().eq("id", spotlight.id);
+
+    if (editingSpotlightId === spotlight.id) {
+      cancelEdit();
+    }
+
+    fetchSpotlights();
+    fetchCampaigns();
   };
 
   const handleDragStart = (id: string) => {
@@ -352,10 +376,13 @@ const Admin = () => {
                     <p className="font-bold text-sm truncate">{s.title}</p>
                     {s.description && <p className="text-xs text-muted-foreground truncate">{s.description}</p>}
                   </div>
-                  <button onClick={() => editingSpotlightId === s.id ? cancelEdit() : startEditSpotlight(s)} className="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors">
+                  <button onClick={() => editingSpotlightId === s.id ? cancelEdit() : startEditSpotlight(s)} className="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors" title="Edit">
                     {editingSpotlightId === s.id ? <X size={16} /> : <Pencil size={16} />}
                   </button>
-                  <button onClick={() => deleteSpotlight(s.id)} className="p-2 text-destructive hover:bg-destructive/10 rounded-lg transition-colors">
+                  <button onClick={() => graduateSpotlight(s)} className="p-2 text-amber-600 hover:bg-amber-100 rounded-lg transition-colors" title="Graduate to Past Campaign">
+                    <GraduationCap size={16} />
+                  </button>
+                  <button onClick={() => deleteSpotlight(s.id)} className="p-2 text-destructive hover:bg-destructive/10 rounded-lg transition-colors" title="Delete">
                     <Trash2 size={16} />
                   </button>
                 </div>
