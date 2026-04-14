@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
 const Header = () => {
@@ -28,13 +29,13 @@ const Header = () => {
 
         {/* Right */}
         <div className="flex justify-end">
-          <a
-            href="#manage"
+          <Link
+            to="/manage"
             className="px-3 py-1.5 sm:px-5 sm:py-2.5 bg-primary text-primary-foreground rounded-full text-xs sm:text-sm font-bold hover:opacity-90 transition-opacity whitespace-nowrap"
           >
             <span className="sm:hidden">Manage</span>
             <span className="hidden sm:inline">Manage Subscription</span>
-          </a>
+          </Link>
         </div>
       </div>
       {menuOpen && (
