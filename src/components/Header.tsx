@@ -22,7 +22,7 @@ const Header = () => {
         </div>
 
         {/* Center */}
-        <h1 className="text-xl font-serif font-bold tracking-tight text-foreground text-center">
+        <h1 className="text-xl md:text-3xl font-serif font-bold tracking-tight text-foreground text-center">
           1ManInAfrica
         </h1>
 
