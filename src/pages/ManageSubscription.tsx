@@ -64,7 +64,7 @@ const ManageSubscription = () => {
           </div>
 
           <p className="text-center text-sm text-muted-foreground">
-            Thank you for being part of our community of donors.
+            Thank you for being part of our community of donors :)
           </p>
         </div>
       </main>
