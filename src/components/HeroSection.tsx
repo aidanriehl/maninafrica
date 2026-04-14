@@ -47,7 +47,7 @@ const HeroSection = () => {
             rel={fundUrl ? "noopener noreferrer" : undefined}
             className="px-8 py-3 bg-primary text-primary-foreground rounded-full font-bold text-base hover:opacity-90 transition-opacity"
           >
-            Donate to Our Fund
+            Join the Donors - $10/month
           </a>
           <Link
             to="/campaigns"

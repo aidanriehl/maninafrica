@@ -621,7 +621,7 @@ const Admin = () => {
             <Settings size={16} /> Site Settings
           </h2>
           <div className="space-y-2">
-            <label className="text-xs text-muted-foreground">"Donate to Our Fund" Button URL</label>
+            <label className="text-xs text-muted-foreground">"Join the Donors" Button URL</label>
             <div className="flex gap-2">
               <input
                 type="url"
